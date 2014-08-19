@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CheeseBrowser</string>
+    <string name="reboot_button">重启</string>
+	<string name="edit_button">编辑</string>
+	<string name="disable_display_button">关闭显示</string>
+
+    <string name="startup_time_text_vie_string">自动开机时间:</string>
+    <string name="shutdown_time_text_view_string">自动关机时间:</string>
+    <string name="homepage_text_view_string">主页:</string>
+</resources>
