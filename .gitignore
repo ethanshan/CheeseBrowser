@@ -1,0 +1,12 @@
+*.swp
+*.class
+*.jar
+*.apk
+*.dex
+*.cache
+*.ap_
+*.res
+.idea/
+.settings/
+.project
+.classpath
