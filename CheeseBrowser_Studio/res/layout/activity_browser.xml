@@ -14,7 +14,7 @@
             android:id="@+id/startup_time_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/startup_time_text_vie_string" />
+            android:text="@string/startup_time_text_view_string" />
 
         <Button
             android:id="@+id/startup_time_edit_button"
@@ -73,6 +73,7 @@
         android:layout_height="wrap_content"
         android:text="@string/disable_display_button" />
 
+    <!--
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,5 +89,323 @@
                 android:typeface="sans"
                 android:textColor="#ff313a"/>
     </LinearLayout>
+    -->
+
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical">
+
+        <!-- Monday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/monday_string"
+                    android:layout_marginRight="20dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/mon_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/mon_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/mon_enable_checkbox"/>
+
+        </TableRow>
+
+        <!-- Tuesday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/tuesday_string"
+                    android:layout_marginRight="20dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/tues_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/tues_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/tues_enable_checkbox"/>
+        </TableRow>
+
+        <!-- Wednesday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/wednesday_string"
+                    android:layout_marginRight="20dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/wed_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/wed_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/wed_enable_checkbox"/>
+        </TableRow>
+
+        <!-- Thursday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/thursday_string"
+                    android:layout_marginRight="20dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/thur_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/thur_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/thur_enable_checkbox"/>
+        </TableRow>
+
+        <!-- Friday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/friday_string"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/fri_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/fri_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/fri_enable_checkbox"/>
+        </TableRow>
+
+        <!-- Saturday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/saturday_string"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/sat_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/sat_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/sat_enable_checkbox"/>
+        </TableRow>
+
+        <!-- Sunday -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/sunday_string"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/sun_set_startup_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/sun_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/sun_enable_checkbox"/>
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

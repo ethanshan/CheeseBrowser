@@ -6,7 +6,18 @@
 	<string name="edit_button">编辑</string>
 	<string name="disable_display_button">关闭显示</string>
 
-    <string name="startup_time_text_vie_string">自动开机时间:</string>
+    <string name="startup_time_text_view_string">自动开机时间:</string>
     <string name="shutdown_time_text_view_string">自动关机时间:</string>
     <string name="homepage_text_view_string">主页:</string>
+
+
+    <string name="monday_string"    >星期一    </string>
+    <string name="tuesday_string"   >星期二    </string>
+    <string name="wednesday_string" >星期三    </string>
+    <string name="thursday_string"  >星期四    </string>
+    <string name="friday_string"    >星期五    </string>
+    <string name="saturday_string"  >星期六    </string>
+    <string name="sunday_string"    >星期日    </string>
+
+    <string name="single_enable_checkout_string">使能</string>
 </resources>

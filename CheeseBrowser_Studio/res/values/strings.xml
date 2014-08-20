@@ -9,7 +9,17 @@
     <string name="edit_dialog_ok_button">OK</string>
     <string name="edit_dialog_cancel_button">Cancel</string>
 
-    <string name="startup_time_text_vie_string">Auto Startup Time:</string>
+    <string name="startup_time_text_view_string" >Auto Startup Time: </string>
     <string name="shutdown_time_text_view_string">Auto Shutdown Time:</string>
     <string name="homepage_text_view_string">Home Page:</string>
+
+    <string name="monday_string"    >Monday     </string>
+    <string name="tuesday_string"   >Tuesday    </string>
+    <string name="wednesday_string" >Wednesday  </string>
+    <string name="thursday_string"  >Thursday   </string>
+    <string name="friday_string"    >Friday     </string>
+    <string name="saturday_string"  >Saturday   </string>
+    <string name="sunday_string"    >Sunday     </string>
+
+    <string name="single_enable_checkout_string">Enable</string>
 </resources>

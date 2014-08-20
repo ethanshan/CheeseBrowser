@@ -43,19 +43,31 @@ public class BrowserActivity extends Activity {
     private Button homepage_edit_button             = null;
     private Button disable_display_button           = null;
 
+    // The set time type, while call Utils.setScheduleTime
+    // as a function parameters.
     public static final int STARTUP_TIME            = 0;
     public static final int SHUTDOWN_TIME           = 1;
+
+    // The startup and shutdown action will execute scheduled,
+    // Execute period is one day. (Millis second)
     public static final long ONE_DAY_TIME_MILLIS = 24 * 60 * 60 * 1000;
-    // Auto startup/shutdown action
+
+    // Private SharedPreferences data group name
     public static final String PREFERENCE_DATA              = "BrowserActivity";
+
+    // Auto startup/shutdown action
     public static final String AUTO_STARTUP_ACTION          = "net.codingpark.AUTO_STARTUP_ACTION";
     public static final String AUTO_SHUTDOWN_ACTION         = "net.codingpark.AUTO_SHUTDOWN_ACTION";
+
+    // The key used to find startup/shutdown/homepage_url
+    // from SharedPreferences
     public static final String STARTUP_TIME_KEY             = "startup_time";
     public static final String SHUTDOWN_TIME_KEY            = "shutdown_time";
     public static final String WEB_URL_KEY                  = "web_url";
     public static final String DEFAULT_WEB_URL              = "http://192.168.0.15/show/index";
+
     // Scheduled execute binary file name
-    public static final String REBOOT_BIN                   = "reboot.sh";
+    public static final String REBOOT_BIN                   = "system_reboot.sh";
     public static final String SCREEN_ON_BIN                = "screen_on.sh";
     public static final String SCREEN_OFF_BIN               = "screen_off.sh";
 
@@ -68,11 +80,14 @@ public class BrowserActivity extends Activity {
 		initUI();
 	}
 
+    /**
+     * Use stored in SharedPreferences' data to refresh UI
+     */
     private void updateView() {
         Log.d(TAG, "Update shutdown and startup time!");
         SharedPreferences sp = this.getSharedPreferences(
                 BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
-        startup_time_view.setText(getString(R.string.startup_time_text_vie_string)
+        startup_time_view.setText(getString(R.string.startup_time_text_view_string)
                 .concat(sp.getString(STARTUP_TIME_KEY, "6:30")));
         shutdown_time_view.setText(getString(R.string.shutdown_time_text_view_string)
                 .concat(sp.getString(SHUTDOWN_TIME_KEY, "18.30")));
@@ -98,6 +113,7 @@ public class BrowserActivity extends Activity {
 				.findViewById(R.id.shutdown_time_edit_button);
 		reboot_button = (Button) this.findViewById(R.id.reboot_button);
         homepage_edit_button = (Button) this.findViewById(R.id.homepage_edit_button);
+        disable_display_button = (Button) this.findViewById(R.id.disable_display_button);
 		
 		startup_time_edit_button.setOnClickListener(new OnClickListener() {
  @Override
@@ -140,7 +156,7 @@ public class BrowserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "Handle reboot");
-				Utils.execCmd("system_reboot.sh");
+				Utils.execCmd(REBOOT_BIN);
 			}
 
 		});
@@ -152,7 +168,7 @@ public class BrowserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "Handle disable display");
-				Utils.execCmd("screen_off.sh");
+				Utils.execCmd(SCREEN_OFF_BIN);
 			}
 			
 		});
@@ -168,6 +184,14 @@ public class BrowserActivity extends Activity {
 
 	}
 
+    /**
+     * Handle edit web home page action.
+     * As user click edit button, a setting dialog show with
+     * a editView, used to input new home page url. If user
+     * click ok button, the new url will be stored to
+     * SharedPreferences and refresh UI. At restart next time,
+     * Web browser will auto open the new url.
+     */
     private void editHomePage() {
         Log.d(TAG, "Handle set homepage action");
         // 1. Create edit dialog and initial related widget
