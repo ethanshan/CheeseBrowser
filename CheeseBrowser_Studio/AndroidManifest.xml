@@ -41,10 +41,22 @@
             <intent-filter>
                 <action android:name="net.codingpark.AUTO_STARTUP_ACTION" />
                 <action android:name="net.codingpark.AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.MON_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.MON_AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.TUES_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.TUES_AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.WED_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.WED_AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.THUR_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.THUR_AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.FRI_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.FRI_AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.SAT_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.SAT_AUTO_SHUTDOWN_ACTION" />
+                <action android:name="net.codingpark.SUN_AUTO_STARTUP_ACTION" />
+                <action android:name="net.codingpark.SUN_AUTO_SHUTDOWN_ACTION" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".ScheduleReceiver"/>
-        <receiver android:name=".BootReceiver"/>
 
     </application>
 

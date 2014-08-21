@@ -31,6 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
         webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   // 需要设置这个标志位, 否则会报异常
         context.startActivity(webIntent); // 打开浏览器
 
+        /*
         // 2. Initial scheduled startup task
         // 2.1 Obtain startup time from shared preference
         String startup_time = sp.getString(BrowserActivity.STARTUP_TIME_KEY, "6:30");
@@ -43,6 +44,15 @@ public class BootReceiver extends BroadcastReceiver {
         String shutdown_time = sp.getString(BrowserActivity.SHUTDOWN_TIME_KEY, "18:30");
         // 3.2 Set scheduled shutdown task
         Utils.setScheduleTime(context, BrowserActivity.SHUTDOWN_TIME, shutdown_time);
+        */
+
+        String trigger_time = BrowserActivity.DEFAULT_STARTUP_TIME;
+        for (String key : Utils.key_action_maps.keySet()) {
+            trigger_time = sp.getString(key, Utils.getKeyType(key)
+                    == BrowserActivity.STARTUP_TIME ? BrowserActivity.DEFAULT_STARTUP_TIME
+                    : BrowserActivity.DEFAULT_SHUTDOWN_TIME);
+            Utils.setScheduleTime(context, Utils.key_action_maps.get(key), key, trigger_time);
+        }
 
     }
 
