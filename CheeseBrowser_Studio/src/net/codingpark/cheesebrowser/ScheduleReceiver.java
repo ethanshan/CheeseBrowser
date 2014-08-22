@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.Calendar;
+
 /**
  * Handle AlarmManager scheduled sended startup/shutdown intent
  */
@@ -18,56 +20,34 @@ public class ScheduleReceiver extends BroadcastReceiver {
         // 1. Obtain SharedPreferences object
         SharedPreferences sp = context.getSharedPreferences(
                 BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
-        Log.d(TAG, "Receiver schedule action");
 
-        if (intent.getAction().equals(BrowserActivity.AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.MON_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive monday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.MON_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Monday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.TUES_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive Tuesday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.TUES_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Tuesday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.WED_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive Wednesday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.WED_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Wednesday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.THUR_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive Thursday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.THUR_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Thursday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.FRI_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive Friday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.FRI_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Friday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.SAT_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive Saturday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.SAT_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Saturday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.SUN_AUTO_STARTUP_ACTION)) {
-            Log.d(TAG, "Receive Sunday startup action");
-            Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
-        } else if (intent.getAction().equals(BrowserActivity.SUN_AUTO_SHUTDOWN_ACTION)) {
-            Log.d(TAG, "Receive Sunday shutdown action");
-            Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
+        // 2. Compute now day of week
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
+
+        // 3. Obtain take place action from received intent
+        String action = intent.getAction();
+        Log.d(TAG, "Received action:" + action);
+
+        // 4. Judge today day of week == The take plase action mapping day
+        //    If compared, starting execute
+        if (day_of_week == Utils.action_dayOfWeek_maps.get(action)) {
+            Log.d(TAG, "today_day_of_week:" + day_of_week + "\tmapping_day_of_week:" + Utils.action_dayOfWeek_maps.get(action));
+            // 4.1 Judge the day of week today schedule task weather enabled
+            //     If enable continue
+            if (sp.getInt(Utils.action_enableKey_maps.get(action), BrowserActivity.SCHEDULE_ENABLE) == BrowserActivity.SCHEDULE_ENABLE) {
+                Log.d(TAG, "Today schedule enabled");
+                // 4.2 Judge execute startup or shutdown operation
+                if (action.contains("STARTUP")) {
+                    Log.d(TAG, "Trigger STARTUP operate");
+                    Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
+                } else if (action.contains("SHUTDOWN")) {
+                    Log.d(TAG, "Trigger SHUTDOWN operate");
+                    Utils.execCmd(BrowserActivity.SCREEN_OFF_BIN);
+                }
+            }
         }
+
     }
 };

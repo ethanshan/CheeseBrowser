@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 /**
  * Scheduled Time Store
@@ -42,8 +45,8 @@ public class BrowserActivity extends Activity {
 
 	private static final String TAG = "BrowserActivity";
 
-	private TextView startup_time_view 			= null;
-	private TextView shutdown_time_view 		= null;
+	//private TextView startup_time_view 			= null;
+	//private TextView shutdown_time_view 		= null;
     private TextView homepage_view              = null;
  
 	private Button startup_time_edit_button 		= null;
@@ -89,7 +92,7 @@ public class BrowserActivity extends Activity {
     public static final long ONE_DAY_TIME_MILLIS = 24 * 60 * 60 * 1000;
 
     // Private SharedPreferences data group name
-    public static final String PREFERENCE_DATA              = "BrowserActivity";
+    public static final String PREFERENCE_DATA              = "MyData";
 
     // Auto startup/shutdown action
     public static final String AUTO_STARTUP_ACTION          = "net.codingpark.AUTO_STARTUP_ACTION";
@@ -149,31 +152,35 @@ public class BrowserActivity extends Activity {
     public static final String SCREEN_ON_BIN                = "screen_on.sh";
     public static final String SCREEN_OFF_BIN               = "screen_off.sh";
 
+    private SharedPreferences sp                            = null;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browser);
 
+        sp = this.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
+
 		initUI();
         initHandler();
         updateView();
 	}
-
-    private static final int BUTTON_KEY_TAG     = 0;
-    private static final int CHECKOUT_KEY_TAG   = 1;
 
     /**
      * Use stored in SharedPreferences' data to refresh UI
      */
     private void updateView() {
         Log.d(TAG, "Update widget display shutdown and startup time!");
-        SharedPreferences sp = this.getSharedPreferences(
-                BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
+        //SharedPreferences sp = getSharedPreferences(
+                //BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
+        /*
         startup_time_view.setText(getString(R.string.startup_time_text_view_string)
                 .concat(sp.getString(STARTUP_TIME_KEY, "6:30")));
         shutdown_time_view.setText(getString(R.string.shutdown_time_text_view_string)
                 .concat(sp.getString(SHUTDOWN_TIME_KEY, "18.30")));
+                */
+
         Log.d(TAG, "Startup time " + sp.getString(STARTUP_TIME_KEY, "100"));
         homepage_view.setText(getString(R.string.homepage_text_view_string)
                 .concat(sp.getString(WEB_URL_KEY, DEFAULT_WEB_URL)));
@@ -183,99 +190,78 @@ public class BrowserActivity extends Activity {
         mon_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.MON_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        mon_startup_edit_bt.setTag(MON_STARTUP_TIME_KEY);
         mon_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.MON_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        mon_shutdown_edit_bt.setTag(MON_SHUTDOWN_TIME_KEY);
         mon_schedule_enable_cb.setChecked(
                 sp.getInt(MON_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        mon_schedule_enable_cb.setTag(MON_SCHEDULE_ENABLE_KEY);
 
         // 2.
         tues_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.TUES_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        tues_startup_edit_bt.setTag(TUES_STARTUP_TIME_KEY);
         tues_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.TUES_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        tues_shutdown_edit_bt.setTag(TUES_SHUTDOWN_TIME_KEY);
         tues_schedule_enable_cb.setChecked(
                 sp.getInt(TUES_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        tues_schedule_enable_cb.setTag(TUES_SCHEDULE_ENABLE_KEY);
 
         // 3.
         wed_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.WED_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        wed_startup_edit_bt.setTag(WED_STARTUP_TIME_KEY);
         wed_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.WED_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        wed_shutdown_edit_bt.setTag(WED_SHUTDOWN_TIME_KEY);
         wed_schedule_enable_cb.setChecked(
                 sp.getInt(WED_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        wed_schedule_enable_cb.setTag(WED_SCHEDULE_ENABLE_KEY);
 
         // 4.
         thur_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.THUR_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        thur_startup_edit_bt.setTag(THUR_STARTUP_TIME_KEY);
         thur_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.THUR_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        thur_shutdown_edit_bt.setTag(THUR_SHUTDOWN_TIME_KEY);
         thur_schedule_enable_cb.setChecked(
                 sp.getInt(THUR_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        thur_schedule_enable_cb.setTag(THUR_SCHEDULE_ENABLE_KEY);
 
         // 5.
         fri_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.FRI_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        fri_startup_edit_bt.setTag(FRI_STARTUP_TIME_KEY);
         fri_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.FRI_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        fri_shutdown_edit_bt.setTag(FRI_SHUTDOWN_TIME_KEY);
         fri_schedule_enable_cb.setChecked(
                 sp.getInt(FRI_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        fri_schedule_enable_cb.setTag(FRI_SCHEDULE_ENABLE_KEY);
 
         // 6.
         sat_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.SAT_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        sat_startup_edit_bt.setTag(SAT_STARTUP_TIME_KEY);
         sat_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.SAT_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        sat_shutdown_edit_bt.setTag(SAT_SHUTDOWN_TIME_KEY);
         sat_schedule_enable_cb.setChecked(
                 sp.getInt(SAT_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        sat_schedule_enable_cb.setTag(SAT_SCHEDULE_ENABLE_KEY);
 
         // 7.
         sun_startup_edit_bt.setText(
                 formatTime(sp.getString(
                         this.SUN_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
-        sun_startup_edit_bt.setTag(SUN_STARTUP_TIME_KEY);
         sun_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         this.SUN_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
-        sun_shutdown_edit_bt.setTag(SUN_SHUTDOWN_TIME_KEY);
         sun_schedule_enable_cb.setChecked(
                 sp.getInt(SUN_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
-        sun_schedule_enable_cb.setTag(SUN_SCHEDULE_ENABLE_KEY);
     }
 
     /**
@@ -418,7 +404,7 @@ public class BrowserActivity extends Activity {
                 public void onTimeSet(TimePicker timePicker, int i, int i2) {
                     Log.d(TAG, "Set scheduled time:\t" + i + ":" + i2 + "\tKey:" + key);
                     // Update startup scheduled task time
-                    Utils.setScheduleTime(BrowserActivity.this
+                    setScheduleTime(BrowserActivity.this
                             , Utils.key_action_maps.get(key)
                             , key, i + ":" + i2);
                     updateView();
@@ -436,21 +422,16 @@ public class BrowserActivity extends Activity {
                     + "key:" + compoundButton.getTag()
                     + "\tEnabled:\t" + (b ? "true" : "false"));
             String key = (String) compoundButton.getTag();
-            SharedPreferences sp = BrowserActivity.this.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
+
             SharedPreferences.Editor editor = sp.edit();
-            editor.putInt(key, b ? 1 : 0);
             // Don't forget commit, seriously !
-            editor.commit();
+            editor.putInt(key, b ? 1 : 0).commit();
             updateView();
         }
     }
 
 
 	private void initUI() {
-		startup_time_view = (TextView) this
-				.findViewById(R.id.startup_time_text_view);
-		shutdown_time_view = (TextView) this
-				.findViewById(R.id.shutdown_time_text_view);
         homepage_view = (TextView) this
                 .findViewById(R.id.homepage_text_view);
 
@@ -486,6 +467,27 @@ public class BrowserActivity extends Activity {
         sun_shutdown_edit_bt        = (Button)findViewById(R.id.sun_set_shutdown_bt);
         sun_schedule_enable_cb      = (CheckBox)findViewById(R.id.sun_enable_checkbox);
 
+        mon_startup_edit_bt.setTag(MON_STARTUP_TIME_KEY);
+        mon_shutdown_edit_bt.setTag(MON_SHUTDOWN_TIME_KEY);
+        mon_schedule_enable_cb.setTag(MON_SCHEDULE_ENABLE_KEY);
+        tues_startup_edit_bt.setTag(TUES_STARTUP_TIME_KEY);
+        tues_shutdown_edit_bt.setTag(TUES_SHUTDOWN_TIME_KEY);
+        tues_schedule_enable_cb.setTag(TUES_SCHEDULE_ENABLE_KEY);
+        wed_startup_edit_bt.setTag(WED_STARTUP_TIME_KEY);
+        wed_shutdown_edit_bt.setTag(WED_SHUTDOWN_TIME_KEY);
+        wed_schedule_enable_cb.setTag(WED_SCHEDULE_ENABLE_KEY);
+        thur_startup_edit_bt.setTag(THUR_STARTUP_TIME_KEY);
+        thur_shutdown_edit_bt.setTag(THUR_SHUTDOWN_TIME_KEY);
+        thur_schedule_enable_cb.setTag(THUR_SCHEDULE_ENABLE_KEY);
+        fri_startup_edit_bt.setTag(FRI_STARTUP_TIME_KEY);
+        fri_shutdown_edit_bt.setTag(FRI_SHUTDOWN_TIME_KEY);
+        fri_schedule_enable_cb.setTag(FRI_SCHEDULE_ENABLE_KEY);
+        sat_startup_edit_bt.setTag(SAT_STARTUP_TIME_KEY);
+        sat_shutdown_edit_bt.setTag(SAT_SHUTDOWN_TIME_KEY);
+        sat_schedule_enable_cb.setTag(SAT_SCHEDULE_ENABLE_KEY);
+        sun_startup_edit_bt.setTag(SUN_STARTUP_TIME_KEY);
+        sun_shutdown_edit_bt.setTag(SUN_SHUTDOWN_TIME_KEY);
+        sun_schedule_enable_cb.setTag(SUN_SCHEDULE_ENABLE_KEY);
 	}
 
     /**
@@ -510,11 +512,12 @@ public class BrowserActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Update home page:\t" + editText.getText().toString());
-                SharedPreferences sp = BrowserActivity.this
-                        .getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
+                //SharedPreferences sp = BrowserActivity.this
+                        //.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putString(WEB_URL_KEY, editText.getText().toString());
-                editor.commit();
+                editor.putString(WEB_URL_KEY, editText.getText().toString()).commit();
+                dialog.dismiss();
+                updateView();
             }
         });
         cancel_b.setOnClickListener(new OnClickListener() {
@@ -526,5 +529,41 @@ public class BrowserActivity extends Activity {
         });
         // 3. Make Dialog show
         dialog.show();
+    }
+
+    public  void setScheduleTime(Context ctx, String action, String key, String time) {
+        Log.d(TAG, "Utils setScheduleTime key:" + key + "\taction:" + action + "\ttime:\t" + time);
+        AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        //SharedPreferences sp = this.getSharedPreferences(
+                //BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Intent r_intent = new Intent();
+        int hours = Integer.valueOf(time.split(":")[0]).intValue();
+        int minutes = Integer.valueOf(time.split(":")[1]).intValue();
+        Calendar calendar= Calendar.getInstance();
+        //calendar.setTimeInMillis(System.currentTimeMillis());
+        if (hours < calendar.get(Calendar.HOUR) ||
+                (hours == calendar.get(Calendar.HOUR)
+                        && minutes <= calendar.get(Calendar.MINUTE))) {
+            Log.d(TAG, "Set time before current time, trigger it tomorrow!");
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        Log.d(TAG, "#####" + hours + "####" + minutes + "####action###" + action + "###time##" + calendar.getTime().toString());
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.SECOND, 0);
+
+        // 1. Store time to shared preference
+        editor.putString(key, time).commit();
+
+        // 2. Remove running auto schedule task
+        r_intent.setAction(action);
+        PendingIntent r_pending_intent =
+                PendingIntent.getBroadcast(this, 0, r_intent, 0);
+        alarmManager.cancel(r_pending_intent);
+        // 3. Use new time to create auto startup schedule task
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(), BrowserActivity.ONE_DAY_TIME_MILLIS,
+                r_pending_intent);
     }
 }

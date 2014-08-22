@@ -40,6 +40,44 @@ public class Utils {
         }
     };
 
+    public static final Map<String, String> action_enableKey_maps = new HashMap<String, String>(){
+        {
+            this.put(BrowserActivity.MON_AUTO_SHUTDOWN_ACTION, BrowserActivity.MON_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.MON_AUTO_STARTUP_ACTION, BrowserActivity.MON_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.TUES_AUTO_SHUTDOWN_ACTION, BrowserActivity.TUES_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.TUES_AUTO_STARTUP_ACTION, BrowserActivity.TUES_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.WED_AUTO_SHUTDOWN_ACTION, BrowserActivity.WED_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.WED_AUTO_STARTUP_ACTION, BrowserActivity.WED_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.THUR_AUTO_SHUTDOWN_ACTION, BrowserActivity.THUR_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.THUR_AUTO_STARTUP_ACTION, BrowserActivity.THUR_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.FRI_AUTO_SHUTDOWN_ACTION, BrowserActivity.FRI_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.FRI_AUTO_STARTUP_ACTION, BrowserActivity.FRI_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.SAT_AUTO_SHUTDOWN_ACTION, BrowserActivity.SAT_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.SAT_AUTO_STARTUP_ACTION, BrowserActivity.SAT_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.SUN_AUTO_SHUTDOWN_ACTION, BrowserActivity.SUN_SCHEDULE_ENABLE_KEY);
+            this.put(BrowserActivity.SUN_AUTO_STARTUP_ACTION, BrowserActivity.SUN_SCHEDULE_ENABLE_KEY);
+        }
+    };
+
+    public static final Map<String, Integer> action_dayOfWeek_maps = new HashMap<String, Integer>(){
+        {
+            this.put(BrowserActivity.MON_AUTO_SHUTDOWN_ACTION, Calendar.MONDAY);
+            this.put(BrowserActivity.MON_AUTO_STARTUP_ACTION, Calendar.MONDAY);
+            this.put(BrowserActivity.TUES_AUTO_SHUTDOWN_ACTION, Calendar.TUESDAY);
+            this.put(BrowserActivity.TUES_AUTO_STARTUP_ACTION, Calendar.TUESDAY);
+            this.put(BrowserActivity.WED_AUTO_SHUTDOWN_ACTION, Calendar.WEDNESDAY);
+            this.put(BrowserActivity.WED_AUTO_STARTUP_ACTION, Calendar.WEDNESDAY);
+            this.put(BrowserActivity.THUR_AUTO_SHUTDOWN_ACTION, Calendar.THURSDAY);
+            this.put(BrowserActivity.THUR_AUTO_STARTUP_ACTION, Calendar.THURSDAY);
+            this.put(BrowserActivity.FRI_AUTO_SHUTDOWN_ACTION, Calendar.FRIDAY);
+            this.put(BrowserActivity.FRI_AUTO_STARTUP_ACTION, Calendar.FRIDAY);
+            this.put(BrowserActivity.SAT_AUTO_SHUTDOWN_ACTION, Calendar.SATURDAY);
+            this.put(BrowserActivity.SAT_AUTO_STARTUP_ACTION, Calendar.SATURDAY);
+            this.put(BrowserActivity.SUN_AUTO_SHUTDOWN_ACTION, Calendar.SUNDAY);
+            this.put(BrowserActivity.SUN_AUTO_STARTUP_ACTION, Calendar.SUNDAY);
+        }
+    };
+
     /**
      * Execute shell command through java code
      * @param cmd
@@ -79,9 +117,6 @@ public class Utils {
         } else if (key.equals(BrowserActivity.MON_SHUTDOWN_TIME_KEY)) {
 
         }
-
-
-
         return action;
     }
 
@@ -108,8 +143,8 @@ public class Utils {
         calendar.set(Calendar.SECOND, 0);
 
         // 1. Store time to shared preference
-        editor.putString(key, time);
-        editor.commit();
+        editor.putString(key, time).commit();
+
         // 2. Remove running auto schedule task
         r_intent.setAction(action);
         PendingIntent r_pending_intent =
@@ -119,10 +154,6 @@ public class Utils {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), BrowserActivity.ONE_DAY_TIME_MILLIS,
                 r_pending_intent);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-//                System.currentTimeMillis() + 1000*10, BrowserActivity.ONE_DAY_TIME_MILLIS,
-//                r_pending_intent);
-//        Log.d(TAG, "" + System.currentTimeMillis() + "\t" + calendar.getTimeInMillis() + "\t" + calendar.getTime().toString() + "\t" + Calendar.getInstance().getTime());
     }
 
     /**
@@ -155,8 +186,7 @@ public class Utils {
         if (type == BrowserActivity.STARTUP_TIME) {
             Log.d(TAG, "Set auto startup time, time:\t" + time);
             // 1. Store startup time to shared preference
-            editor.putString(BrowserActivity.STARTUP_TIME_KEY, time);
-            editor.commit();
+            editor.putString(BrowserActivity.STARTUP_TIME_KEY, time).commit();
             // 2. Remove running auto startup schedule task
             r_intent.setAction(BrowserActivity.AUTO_STARTUP_ACTION);
             PendingIntent r_startup_pending_intent =
@@ -169,8 +199,7 @@ public class Utils {
         } else if (type == BrowserActivity.SHUTDOWN_TIME) {
             Log.d(TAG, "Set auto shutdown time, time:\t" + time);
             // 1. Store shutdown time to shared preference
-            editor.putString(BrowserActivity.SHUTDOWN_TIME_KEY, time);
-            editor.commit();
+            editor.putString(BrowserActivity.SHUTDOWN_TIME_KEY, time).commit();
             // 2. Remove running auto startup schedule task
             r_intent.setAction(BrowserActivity.AUTO_SHUTDOWN_ACTION);
             PendingIntent r_shutdown_pending_intent =

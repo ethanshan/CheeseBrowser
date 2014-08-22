@@ -18,35 +18,20 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        // 1. Obtain SharedPreferences object
         SharedPreferences sp = context.getSharedPreferences(
                 BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
 
-        // 1. Listen boot completed action, then start Web Browser with the URL
-        Log.d(TAG, "Boot completed, starting BrowserActivity!");
-        // TODO The URL sended to Web Browser should can be editable
+        // 2. Listen boot completed action, then start Web Browser with the URL
         String urlText = sp.getString(BrowserActivity.WEB_URL_KEY,
-                "http://192.168.0.15/show/index");   // Web URL
+                BrowserActivity.DEFAULT_WEB_URL);   // Web URL
         Uri uri = Uri.parse(urlText);
         Intent webIntent = new Intent(Intent.ACTION_VIEW, uri);
         webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   // 需要设置这个标志位, 否则会报异常
         context.startActivity(webIntent); // 打开浏览器
 
-        /*
-        // 2. Initial scheduled startup task
-        // 2.1 Obtain startup time from shared preference
-        String startup_time = sp.getString(BrowserActivity.STARTUP_TIME_KEY, "6:30");
-        // 2.2 Set scheduled startup task
-        Utils.setScheduleTime(context, BrowserActivity.STARTUP_TIME, startup_time);
-
-
-        // 3. Initial scheduled shutdown task
-        // 3.1 Obtain shutdown time from shared preference
-        String shutdown_time = sp.getString(BrowserActivity.SHUTDOWN_TIME_KEY, "18:30");
-        // 3.2 Set scheduled shutdown task
-        Utils.setScheduleTime(context, BrowserActivity.SHUTDOWN_TIME, shutdown_time);
-        */
-
-        String trigger_time = BrowserActivity.DEFAULT_STARTUP_TIME;
+        // 3. Initial all scheduled task
+        String trigger_time;
         for (String key : Utils.key_action_maps.keySet()) {
             trigger_time = sp.getString(key, Utils.getKeyType(key)
                     == BrowserActivity.STARTUP_TIME ? BrowserActivity.DEFAULT_STARTUP_TIME

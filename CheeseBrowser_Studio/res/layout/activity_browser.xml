@@ -5,52 +5,35 @@
     android:orientation="vertical"
     tools:context="net.codingpark.cheesebrowser.BrowserActivity" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/startup_time_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/startup_time_text_view_string" />
-
-        <Button
-            android:id="@+id/startup_time_edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_button" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/shutdown_time_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/shutdown_time_text_view_string" />
-
-        <Button
-            android:id="@+id/shutdown_time_edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_button" />
-
-    </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
+        <Button
+                android:id="@+id/reboot_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reboot_button" />
+
+        <Button
+                android:id="@+id/disable_display_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/disable_display_button" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
         <TextView
                 android:id="@+id/homepage_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/homepage_text_view_string" />
 
         <Button
@@ -61,41 +44,27 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/reboot_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reboot_button" />
-
-    <Button
-        android:id="@+id/disable_display_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/disable_display_button" />
-
-    <!--
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal">
-
-        <TextClock
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:id="@+id/textClock"
-                android:textSize="@android:dimen/notification_large_icon_width"
-                android:textStyle="bold"
-                android:typeface="sans"
-                android:textColor="#ff313a"/>
-    </LinearLayout>
-    -->
 
     <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical">
 
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+
+            <TextClock
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textClock"
+                    android:typeface="normal"
+                    android:format24Hour="yyyy-MM-dd hh:mm, EEEE"
+                    android:textColor="#a2ff4c"
+                    android:textStyle="bold"
+                    android:textSize="30px"/>
+        </TableRow>
         <!-- Monday -->
         <TableRow
                 android:layout_width="fill_parent"
@@ -396,6 +365,51 @@
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/sun_set_shutdown_bt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/single_enable_checkout_string"
+                    android:id="@+id/sun_enable_checkbox"/>
+        </TableRow>
+
+        <!-- ALL -->
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/quick_string"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/startup_time_text_view_string"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/startup_time_edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:30"
+                    android:layout_marginRight="20dp"/>
+
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/shutdown_time_text_view_string"
+                    android:id="@+id/textView"
+                    android:layout_marginRight="20dp"/>
+            <Button
+                    android:id="@+id/shutdown_time_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="06:30"
