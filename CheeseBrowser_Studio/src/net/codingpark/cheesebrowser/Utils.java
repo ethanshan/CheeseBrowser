@@ -186,7 +186,7 @@ public class Utils {
         if (type == BrowserActivity.STARTUP_TIME) {
             Log.d(TAG, "Set auto startup time, time:\t" + time);
             // 1. Store startup time to shared preference
-            editor.putString(BrowserActivity.STARTUP_TIME_KEY, time).commit();
+            editor.putString(BrowserActivity.GLOBAL_STARTUP_TIME_KEY, time).commit();
             // 2. Remove running auto startup schedule task
             r_intent.setAction(BrowserActivity.AUTO_STARTUP_ACTION);
             PendingIntent r_startup_pending_intent =
@@ -199,7 +199,7 @@ public class Utils {
         } else if (type == BrowserActivity.SHUTDOWN_TIME) {
             Log.d(TAG, "Set auto shutdown time, time:\t" + time);
             // 1. Store shutdown time to shared preference
-            editor.putString(BrowserActivity.SHUTDOWN_TIME_KEY, time).commit();
+            editor.putString(BrowserActivity.GLOBAL_SHUTDOWN_TIME_KEY, time).commit();
             // 2. Remove running auto startup schedule task
             r_intent.setAction(BrowserActivity.AUTO_SHUTDOWN_ACTION);
             PendingIntent r_shutdown_pending_intent =

@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,8 +48,6 @@ public class BrowserActivity extends Activity {
 	//private TextView shutdown_time_view 		= null;
     private TextView homepage_view              = null;
  
-	private Button startup_time_edit_button 		= null;
-	private Button shutdown_time_edit_button 		= null;
 	private Button reboot_button 					= null;
     private Button homepage_edit_button             = null;
     private Button disable_display_button           = null;
@@ -77,6 +74,9 @@ public class BrowserActivity extends Activity {
     private Button sun_startup_edit_bt              = null;
     private Button sun_shutdown_edit_bt             = null;
     private CheckBox sun_schedule_enable_cb         = null;
+    private Button global_startup_edit_bt = null;
+    private Button global_shutdown_edit_bt = null;
+    private CheckBox global_schedule_enable_cb      = null;
 
     // The set time type, while call Utils.setScheduleTime
     // as a function parameters.
@@ -116,8 +116,6 @@ public class BrowserActivity extends Activity {
 
     // The key used to find startup/shutdown/homepage_url
     // from SharedPreferences
-    public static final String STARTUP_TIME_KEY             = "startup_time";
-    public static final String SHUTDOWN_TIME_KEY            = "shutdown_time";
     public static final String WEB_URL_KEY                  = "web_url";
     public static final String DEFAULT_WEB_URL              = "http://192.168.0.15/show/index";
     public static final String DEFAULT_STARTUP_TIME         = "6:30";
@@ -146,6 +144,9 @@ public class BrowserActivity extends Activity {
     public static final String SUN_STARTUP_TIME_KEY         = "sun_startup_time";
     public static final String SUN_SHUTDOWN_TIME_KEY        = "sun_shutdown_time";
     public static final String SUN_SCHEDULE_ENABLE_KEY      = "sun_schedule_enable";
+    public static final String GLOBAL_STARTUP_TIME_KEY      = "global_startup_time";
+    public static final String GLOBAL_SHUTDOWN_TIME_KEY     = "global_shutdown_time";
+    public static final String GLOBAL_SCHEDULE_ENABLE_KEY   = "sun_schedule_enable";
 
     // Scheduled execute binary file name
     public static final String REBOOT_BIN                   = "system_reboot.sh";
@@ -172,16 +173,7 @@ public class BrowserActivity extends Activity {
      */
     private void updateView() {
         Log.d(TAG, "Update widget display shutdown and startup time!");
-        //SharedPreferences sp = getSharedPreferences(
-                //BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
-        /*
-        startup_time_view.setText(getString(R.string.startup_time_text_view_string)
-                .concat(sp.getString(STARTUP_TIME_KEY, "6:30")));
-        shutdown_time_view.setText(getString(R.string.shutdown_time_text_view_string)
-                .concat(sp.getString(SHUTDOWN_TIME_KEY, "18.30")));
-                */
 
-        Log.d(TAG, "Startup time " + sp.getString(STARTUP_TIME_KEY, "100"));
         homepage_view.setText(getString(R.string.homepage_text_view_string)
                 .concat(sp.getString(WEB_URL_KEY, DEFAULT_WEB_URL)));
 
@@ -262,6 +254,18 @@ public class BrowserActivity extends Activity {
         sun_schedule_enable_cb.setChecked(
                 sp.getInt(SUN_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
+
+        // Global.
+        global_startup_edit_bt.setText(
+                formatTime(sp.getString(
+                        this.GLOBAL_STARTUP_TIME_KEY, DEFAULT_STARTUP_TIME)));
+        global_shutdown_edit_bt.setText(
+                formatTime((sp.getString(
+                        this.GLOBAL_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
+        global_schedule_enable_cb.setChecked(
+                sp.getInt(GLOBAL_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
+                        == SCHEDULE_ENABLE);
+
     }
 
     /**
@@ -292,39 +296,6 @@ public class BrowserActivity extends Activity {
     }
 
     private void initHandler() {
-        startup_time_edit_button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Handle edit startup time edit action");
-                TimePickerDialog picker = new TimePickerDialog(BrowserActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i2) {
-                        Log.d(TAG, "Set startup scheduled time:\t" + i + ":" + i2);
-                        // Update startup scheduled task time
-                        Utils.setScheduleTime(BrowserActivity.this, BrowserActivity.STARTUP_TIME, i + ":" + i2);
-                        updateView();
-                    }
-                }, 0, 0, false);
-                picker.show();
-            }
-
-        });
-
-        shutdown_time_edit_button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Handle edit shutdown time edit action");
-                TimePickerDialog picker = new TimePickerDialog(BrowserActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i2) {
-                        Log.d(TAG, "Set shutdown scheduled time:\t" + i + ":" + i2);
-                        Utils.setScheduleTime(BrowserActivity.this, BrowserActivity.SHUTDOWN_TIME, i + ":" + i2);
-                        updateView();
-                    }
-                }, 0, 0, false);
-                picker.show();
-            }
-        });
 
         // Handle reboot action
         // shell: system_reboot.sh
@@ -391,6 +362,11 @@ public class BrowserActivity extends Activity {
         sun_shutdown_edit_bt.setOnClickListener(timeListener);
         sun_schedule_enable_cb.setOnCheckedChangeListener(enableListener);
 
+        // Global
+        global_startup_edit_bt.setOnClickListener(timeListener);
+        global_shutdown_edit_bt.setOnClickListener(timeListener);
+        global_schedule_enable_cb.setOnCheckedChangeListener(enableListener);
+
     }
 
     public class ScheduleTimeEditListener implements OnClickListener {
@@ -403,10 +379,38 @@ public class BrowserActivity extends Activity {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int i, int i2) {
                     Log.d(TAG, "Set scheduled time:\t" + i + ":" + i2 + "\tKey:" + key);
-                    // Update startup scheduled task time
-                    setScheduleTime(BrowserActivity.this
-                            , Utils.key_action_maps.get(key)
-                            , key, i + ":" + i2);
+                    SharedPreferences sp = BrowserActivity.this.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+
+                    // 1. If edited is global startup time
+                    //    Loop set schedule startup time in all startup keys
+                    if (key.equals(GLOBAL_STARTUP_TIME_KEY)) {
+                        for (String r_key : Utils.key_action_maps.keySet()) {
+                            if (r_key.contains("startup"))
+                            setScheduleTime(BrowserActivity.this
+                                    , Utils.key_action_maps.get(r_key)
+                                    , r_key, i + ":" + i2);
+                        }
+                        editor.putString(GLOBAL_STARTUP_TIME_KEY, i + ":" + i2).commit();
+                    }
+                    // 2. If edited is global shutdown time
+                    //    Loop set schedule shutdown time in all startup keys
+                    else if (key.equals(GLOBAL_SHUTDOWN_TIME_KEY)) {
+                        for (String r_key : Utils.key_action_maps.keySet()) {
+                            if (r_key.contains("shutdown"))
+                                setScheduleTime(BrowserActivity.this
+                                        , Utils.key_action_maps.get(r_key)
+                                        , r_key, i + ":" + i2);
+                        }
+                        editor.putString(GLOBAL_SHUTDOWN_TIME_KEY, i + ":" + i2).commit();
+                    }
+                    // 3. If edited is one day startup/shutdown time
+                    // Update the day scheduled task time
+                    else {
+                        setScheduleTime(BrowserActivity.this
+                                , Utils.key_action_maps.get(key)
+                                , key, i + ":" + i2);
+                    }
                     updateView();
                 }
             }, 0, 0, false);
@@ -422,10 +426,19 @@ public class BrowserActivity extends Activity {
                     + "key:" + compoundButton.getTag()
                     + "\tEnabled:\t" + (b ? "true" : "false"));
             String key = (String) compoundButton.getTag();
-
             SharedPreferences.Editor editor = sp.edit();
-            // Don't forget commit, seriously !
-            editor.putInt(key, b ? 1 : 0).commit();
+            // 1. If edit global schedule enable state
+            //    Loop set schedule enable state from Monday to Sunday
+            if (key.equals(GLOBAL_SCHEDULE_ENABLE_KEY)) {
+                for (String r_key : Utils.action_enableKey_maps.values()) {
+                    editor.putInt(r_key, b ? 1 : 0).commit();
+                }
+            }
+            // 2. If edit one day schedule enable state
+            else {
+                // Don't forget commit, seriously !
+                editor.putInt(key, b ? 1 : 0).commit();
+            }
             updateView();
         }
     }
@@ -435,11 +448,6 @@ public class BrowserActivity extends Activity {
         homepage_view = (TextView) this
                 .findViewById(R.id.homepage_text_view);
 
-
-		startup_time_edit_button = (Button) this
-				.findViewById(R.id.startup_time_edit_button);
-		shutdown_time_edit_button = (Button) this
-				.findViewById(R.id.shutdown_time_edit_button);
 		reboot_button = (Button) this.findViewById(R.id.reboot_button);
         homepage_edit_button = (Button) this.findViewById(R.id.homepage_edit_button);
         disable_display_button = (Button) this.findViewById(R.id.disable_display_button);
@@ -466,6 +474,9 @@ public class BrowserActivity extends Activity {
         sun_startup_edit_bt         = (Button)findViewById(R.id.sun_set_startup_bt);
         sun_shutdown_edit_bt        = (Button)findViewById(R.id.sun_set_shutdown_bt);
         sun_schedule_enable_cb      = (CheckBox)findViewById(R.id.sun_enable_checkbox);
+        global_startup_edit_bt      = (Button)findViewById(R.id.default_startup_time_edit_button);
+        global_shutdown_edit_bt     = (Button)findViewById(R.id.default_shutdown_time_edit_button);
+        global_schedule_enable_cb   = (CheckBox)findViewById(R.id.default_enable_checkbox);
 
         mon_startup_edit_bt.setTag(MON_STARTUP_TIME_KEY);
         mon_shutdown_edit_bt.setTag(MON_SHUTDOWN_TIME_KEY);
@@ -488,6 +499,9 @@ public class BrowserActivity extends Activity {
         sun_startup_edit_bt.setTag(SUN_STARTUP_TIME_KEY);
         sun_shutdown_edit_bt.setTag(SUN_SHUTDOWN_TIME_KEY);
         sun_schedule_enable_cb.setTag(SUN_SCHEDULE_ENABLE_KEY);
+        global_startup_edit_bt.setTag(GLOBAL_STARTUP_TIME_KEY);
+        global_shutdown_edit_bt.setTag(GLOBAL_SHUTDOWN_TIME_KEY);
+        global_schedule_enable_cb.setTag(GLOBAL_SCHEDULE_ENABLE_KEY);
 	}
 
     /**
@@ -561,6 +575,7 @@ public class BrowserActivity extends Activity {
         PendingIntent r_pending_intent =
                 PendingIntent.getBroadcast(this, 0, r_intent, 0);
         alarmManager.cancel(r_pending_intent);
+
         // 3. Use new time to create auto startup schedule task
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), BrowserActivity.ONE_DAY_TIME_MILLIS,

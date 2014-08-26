@@ -394,7 +394,7 @@
                     android:text="@string/startup_time_text_view_string"
                     android:layout_marginRight="20dp"/>
             <Button
-                    android:id="@+id/startup_time_edit_button"
+                    android:id="@+id/default_startup_time_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="06:30"
@@ -409,7 +409,7 @@
                     android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
-                    android:id="@+id/shutdown_time_edit_button"
+                    android:id="@+id/default_shutdown_time_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="06:30"
@@ -418,7 +418,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/single_enable_checkout_string"
-                    android:id="@+id/sun_enable_checkbox"/>
+                    android:id="@+id/default_enable_checkbox"/>
         </TableRow>
     </TableLayout>
 

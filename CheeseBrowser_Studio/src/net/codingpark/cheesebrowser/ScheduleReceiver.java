@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.Calendar;
 
 /**
- * Handle AlarmManager scheduled sended startup/shutdown intent
+ * Handle AlarmManager scheduled startup/shutdown intent
  */
 public class ScheduleReceiver extends BroadcastReceiver {
 
@@ -30,13 +30,14 @@ public class ScheduleReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         Log.d(TAG, "Received action:" + action);
 
-        // 4. Judge today day of week == The take plase action mapping day
-        //    If compared, starting execute
+        // 4. Judge today day of week == The take place action mapping day
+        //    If matching, starting execute
         if (day_of_week == Utils.action_dayOfWeek_maps.get(action)) {
             Log.d(TAG, "today_day_of_week:" + day_of_week + "\tmapping_day_of_week:" + Utils.action_dayOfWeek_maps.get(action));
             // 4.1 Judge the day of week today schedule task weather enabled
             //     If enable continue
-            if (sp.getInt(Utils.action_enableKey_maps.get(action), BrowserActivity.SCHEDULE_ENABLE) == BrowserActivity.SCHEDULE_ENABLE) {
+            if (sp.getInt(Utils.action_enableKey_maps.get(action), BrowserActivity.SCHEDULE_ENABLE)
+                    == BrowserActivity.SCHEDULE_ENABLE) {
                 Log.d(TAG, "Today schedule enabled");
                 // 4.2 Judge execute startup or shutdown operation
                 if (action.contains("STARTUP")) {
