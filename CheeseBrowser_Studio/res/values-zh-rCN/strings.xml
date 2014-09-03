@@ -5,19 +5,23 @@
     <string name="reboot_button">重启</string>
 	<string name="edit_button">编辑</string>
 	<string name="disable_display_button">关闭显示</string>
+    <string name="edit_dialog_text_view">主页</string>
+    <string name="edit_dialog_ok_button">确认</string>
+    <string name="edit_dialog_cancel_button">取消</string>
+    <string name="play_button">开始播放</string>
 
     <string name="startup_time_text_view_string">自动开机时间:</string>
     <string name="shutdown_time_text_view_string">自动关机时间:</string>
     <string name="homepage_text_view_string">主页:</string>
 
-    <string name="monday_string"    >星期一    </string>
-    <string name="tuesday_string"   >星期二    </string>
-    <string name="wednesday_string" >星期三    </string>
-    <string name="thursday_string"  >星期四    </string>
-    <string name="friday_string"    >星期五    </string>
-    <string name="saturday_string"  >星期六    </string>
-    <string name="sunday_string"    >星期日    </string>
-    <string name="quick_string"     >快捷设置  </string>
+    <string name="monday_string"    >星期一  </string>
+    <string name="tuesday_string"   >星期二  </string>
+    <string name="wednesday_string" >星期三  </string>
+    <string name="thursday_string"  >星期四  </string>
+    <string name="friday_string"    >星期五  </string>
+    <string name="saturday_string"  >星期六  </string>
+    <string name="sunday_string"    >星期日  </string>
+    <string name="quick_string"     >快捷设置</string>
 
     <string name="single_enable_checkout_string">开启</string>
 </resources>

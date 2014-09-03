@@ -8,6 +8,7 @@
     <string name="edit_dialog_text_view">Home Page</string>
     <string name="edit_dialog_ok_button">OK</string>
     <string name="edit_dialog_cancel_button">Cancel</string>
+    <string name="play_button">Play</string>
 
     <string name="startup_time_text_view_string" >Auto Startup Time: </string>
     <string name="shutdown_time_text_view_string">Auto Shutdown Time:</string>

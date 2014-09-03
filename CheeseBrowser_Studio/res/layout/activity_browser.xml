@@ -21,6 +21,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/disable_display_button" />
+
+        <Button
+                android:id="@+id/play_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/play_button" />
+
+        <Button
+                android:id="@+id/start_server_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启服务" />
+
+        <Button
+                android:id="@+id/stop_server_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关闭服务" />
     </LinearLayout>
 
     <LinearLayout
@@ -75,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/monday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -121,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/tuesday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -166,7 +184,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/wednesday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -211,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/thursday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -256,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/friday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -300,7 +318,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/saturday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -343,7 +361,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/sunday_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -386,7 +404,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/quick_string"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="0dp"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
