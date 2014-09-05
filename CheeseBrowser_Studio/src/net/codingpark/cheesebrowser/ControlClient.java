@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
@@ -20,11 +21,11 @@ import java.util.Stack;
  * Used to obtain startup/shutdown schedule time, and
  * receive shutdown/reboot command
  */
-public class ControlServer extends Service {
+public class ControlClient extends Service {
 
-    private static final String TAG     = "ControlServer";
+    private static final String TAG     = "ControlClient";
 
-    private static int SERVER_PORT      = 5678;
+    private static int SERVER_PORT      = 8888;
 
     /**
      * A stack that contains all connected control clients.
@@ -33,12 +34,13 @@ public class ControlServer extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "Starting control server.");
-        try {
-            setupServer();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Log.d(TAG, "Starting control client.");
+        //try {
+            //setupServer();
+            syncConfig();
+        //} catch (IOException e) {
+            //e.printStackTrace();
+        //}
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -46,9 +48,48 @@ public class ControlServer extends Service {
         return null;
     }
 
+
+    private void syncConfig() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Socket socket = null;
+                BufferedReader br = null;
+                PrintWriter pw = null;
+                try {
+                    // Create socket to connect server
+                    socket = new Socket("192.168.1.160", SERVER_PORT);
+                    System.out.println("Socket=" + socket);
+                    br = new BufferedReader(new InputStreamReader(
+                            socket.getInputStream()));
+                    //pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+                    //socket.getOutputStream())));
+                    String msg = br.readLine();
+                    Log.d(TAG, "Receive message: \n" + msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        System.out.println("close......");
+                        if (br !=  null)
+                            br.close();
+                        //pw.close();
+                        if (socket != null)
+                            socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
+    }
+
     /**
      * Sets up the TCP/IP server socket.
      */
+    /*
     private void setupServer() throws IOException {
         Log.d(TAG, "Setting up server...");
         final ServerSocket socket = new ServerSocket(SERVER_PORT);
@@ -81,4 +122,5 @@ public class ControlServer extends Service {
 
         Log.d(TAG, "Finished setting up server...");
     }
+    */
 }

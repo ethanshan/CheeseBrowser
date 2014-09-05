@@ -354,7 +354,7 @@ public class BrowserActivity extends Activity {
             public void onClick(View view) {
                 Log.d(TAG, "start_server_button clicked");
                 Intent r_intent = new Intent();
-                r_intent.setClass(BrowserActivity.this, ControlServer.class);
+                r_intent.setClass(BrowserActivity.this, ControlClient.class);
                 BrowserActivity.this.startService(r_intent);
             }
         });
