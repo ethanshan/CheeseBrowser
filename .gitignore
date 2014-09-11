@@ -8,5 +8,11 @@
 *.res
 .idea/
 .settings/
+gen/
+libs/
+bin/
+obj/
 .project
 .classpath
+.externalToolBuilders/
+tags

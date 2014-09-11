@@ -1,15 +1,17 @@
 package net.codingpark.cheesebrowser;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,8 +21,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-import java.util.Calendar;
 
 /**
  * Scheduled Time Store
@@ -53,6 +53,7 @@ public class BrowserActivity extends Activity {
     private Button play_button                      = null;
     private Button start_server_button              = null;
     private Button stop_server_button               = null;
+    private Button test_button                      = null;
 
     // -------------- Monday to Sunday related show/edit widget --------
     private Button mon_startup_edit_bt              = null;
@@ -146,12 +147,10 @@ public class BrowserActivity extends Activity {
     public static final String GLOBAL_SHUTDOWN_TIME_KEY     = "global_shutdown_time";
     public static final String GLOBAL_SCHEDULE_ENABLE_KEY   = "sun_schedule_enable";
 
-    // Scheduled execute binary file name
-    public static final String REBOOT_BIN                   = "system_reboot.sh";
-    public static final String SCREEN_ON_BIN                = "screen_on.sh";
-    public static final String SCREEN_OFF_BIN               = "screen_off.sh";
 
     private SharedPreferences sp                            = null;
+    
+    private Handler completedHandler						= null;
 
 
 	@Override
@@ -160,6 +159,7 @@ public class BrowserActivity extends Activity {
 		setContentView(R.layout.activity_browser);
 
         sp = this.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
+        completedHandler = new Handler();
 
 		initUI();
         initHandler();
@@ -302,7 +302,7 @@ public class BrowserActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Handle reboot");
-                Utils.execCmd(REBOOT_BIN);
+                Utils.execCmd(Utils.REBOOT_BIN);
             }
 
         });
@@ -314,7 +314,7 @@ public class BrowserActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Handle disable display");
-                Utils.execCmd(SCREEN_OFF_BIN);
+                Utils.execCmd(Utils.SCREEN_OFF_BIN);
             }
 
         });
@@ -323,16 +323,14 @@ public class BrowserActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Start open web browser to play ad");
-                /*
-                Used WebView
+                // Use WebView to display
                 String urlText = sp.getString(BrowserActivity.WEB_URL_KEY,
                         BrowserActivity.DEFAULT_WEB_URL);   // Web URL
                 Intent webIntent = new Intent(BrowserActivity.this, WebActivity.class);
                 webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 webIntent.putExtra("url", urlText);
-                //webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   // 需要设置这个标志位, 否则会报异常
                 BrowserActivity.this.startActivity(webIntent); // 打开浏览器
-                */
+                /*
                 // Use baidu browser
                 // 1. kill baidu browser process
                 Utils.execCmd("busybox killall com.baidu.browser.apps");
@@ -346,6 +344,7 @@ public class BrowserActivity extends Activity {
                 webIntent.setData(uri);
                 webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 BrowserActivity.this.startActivity(webIntent);
+                */
             }
         });
 
@@ -363,6 +362,15 @@ public class BrowserActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "stop_server_button clicked");
+            }
+        });
+
+        test_button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Starting test!");
+                SerialWriteTask task = new SerialWriteTask(BrowserActivity.this, completedHandler);
+                task.start();
             }
         });
 
@@ -438,6 +446,9 @@ public class BrowserActivity extends Activity {
                                     , r_key, i + ":" + i2);
                         }
                         editor.putString(GLOBAL_STARTUP_TIME_KEY, i + ":" + i2).commit();
+                        // Update startup time
+                        SerialWriteTask task = new SerialWriteTask(BrowserActivity.this, completedHandler);
+                        task.start();
                     }
                     // 2. If edited is global shutdown time
                     //    Loop set schedule shutdown time in all startup keys
@@ -456,6 +467,9 @@ public class BrowserActivity extends Activity {
                         setScheduleTime(BrowserActivity.this
                                 , Utils.key_action_maps.get(key)
                                 , key, i + ":" + i2);
+                        // Update startup time
+                        SerialWriteTask task = new SerialWriteTask(BrowserActivity.this, completedHandler);
+                        task.start();
                     }
                     updateView();
                 }
@@ -508,6 +522,7 @@ public class BrowserActivity extends Activity {
         play_button = (Button) findViewById(R.id.play_button);
         start_server_button = (Button) findViewById(R.id.start_server_button);
         stop_server_button = (Button) findViewById(R.id.stop_server_button);
+        test_button = (Button) findViewById(R.id.test_button);
 
 
         // One week widget initial
@@ -639,4 +654,5 @@ public class BrowserActivity extends Activity {
                 calendar.getTimeInMillis(), BrowserActivity.ONE_DAY_TIME_MILLIS,
                 r_pending_intent);
     }
+    
 }

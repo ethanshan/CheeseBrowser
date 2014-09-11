@@ -39,6 +39,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="关闭服务" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test"
+            android:id="@+id/test_button" />
     </LinearLayout>
 
     <LinearLayout
@@ -81,7 +87,7 @@
                     android:format24Hour="yyyy-MM-dd hh:mm, EEEE"
                     android:textColor="#a2ff4c"
                     android:textStyle="bold"
-                    android:textSize="30px"/>
+                    android:textSize="30sp"/>
         </TableRow>
         <!-- Monday -->
         <TableRow
@@ -158,7 +164,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/tues_set_shutdown_bt"
@@ -203,7 +208,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/wed_set_shutdown_bt"
@@ -248,7 +252,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/thur_set_shutdown_bt"
@@ -292,7 +295,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/fri_set_shutdown_bt"
@@ -336,7 +338,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/sat_set_shutdown_bt"
@@ -379,7 +380,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/sun_set_shutdown_bt"
@@ -424,7 +424,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/shutdown_time_text_view_string"
-                    android:id="@+id/textView"
                     android:layout_marginRight="20dp"/>
             <Button
                     android:id="@+id/default_shutdown_time_edit_button"
