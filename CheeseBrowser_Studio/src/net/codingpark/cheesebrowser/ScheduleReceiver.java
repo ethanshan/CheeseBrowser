@@ -51,15 +51,7 @@ public class ScheduleReceiver extends BroadcastReceiver {
                     //Utils.execCmd(BrowserActivity.SCREEN_ON_BIN);
                 } else if (action.contains("SHUTDOWN")) {
                     Log.d(TAG, "Trigger SHUTDOWN operate");
-                    /*
-                    // 1. Calculate next startup time
-                    String startup_time = sp.getString(Utils.startup_time_keys.get(day_of_week - 1)
-                    		, BrowserActivity.DEFAULT_STARTUP_TIME);
-                    duration = Utils.getDuration(startup_time);
-                    Log.d(TAG, "Startup duration: " + duration);
-                    // 2. Cal Utils.setStartupTime to write time to mcu
-                    handler.post(writeTask);
-                    */
+                    Utils.execCmd(Utils.SHUTDOWN);
                 }
             }
         }
