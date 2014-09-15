@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 /**
  * Scheduled Time Store
@@ -145,13 +147,20 @@ public class BrowserActivity extends Activity {
     public static final String SUN_SCHEDULE_ENABLE_KEY      = "sun_schedule_enable";
     public static final String GLOBAL_STARTUP_TIME_KEY      = "global_startup_time";
     public static final String GLOBAL_SHUTDOWN_TIME_KEY     = "global_shutdown_time";
-    public static final String GLOBAL_SCHEDULE_ENABLE_KEY   = "sun_schedule_enable";
+    public static final String GLOBAL_SCHEDULE_ENABLE_KEY   = "global_schedule_enable";
+    
+    public static final int GLOBAL_DAY_OF_WEEK				= Calendar.SATURDAY + 1;
 
 
     private SharedPreferences sp                            = null;
     
     private Handler completedHandler						= null;
+    
+    private static boolean enable_handle					= true;
 
+    public static final int WRITE_START						= 0;
+    public static final int WRITE_COMPLETED					= 1;
+    public static final int WRITE_FAILED					= 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -159,17 +168,82 @@ public class BrowserActivity extends Activity {
 		setContentView(R.layout.activity_browser);
 
         sp = this.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
-        completedHandler = new Handler();
+        completedHandler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				int what = msg.what;
+				switch (what)  {
+					case WRITE_START:
+						setUIState(false);
+						Log.d(TAG, "Write start");
+						Toast.makeText(BrowserActivity.this, "Write start", 5000).show();
+						break;
+					case WRITE_COMPLETED:
+						setUIState(true);
+						Log.d(TAG, "Write completed");
+						Toast.makeText(BrowserActivity.this, "Write completed", 5000).show();
+						break;
+					case WRITE_FAILED:
+						setUIState(true);
+						Log.d(TAG, "Write failed");
+						Toast.makeText(BrowserActivity.this, "Write failed", 5000).show();
+						break;
+					default:
+						Log.d(TAG, "Valid message!");
+				}
+				
+			}
+        	
+        };
 
 		initUI();
         initHandler();
         updateView();
+	}
+	
+	private void setUIState(boolean state) {
+		// Monday
+		mon_startup_edit_bt.setEnabled(state);
+		mon_shutdown_edit_bt.setEnabled(state);
+		mon_schedule_enable_cb.setEnabled(state);
+		// Tuesday 
+		tues_startup_edit_bt.setEnabled(state);
+		tues_shutdown_edit_bt.setEnabled(state);
+		tues_schedule_enable_cb.setEnabled(state);
+		// Wednesday
+		wed_startup_edit_bt.setEnabled(state);
+		wed_shutdown_edit_bt.setEnabled(state);
+		wed_schedule_enable_cb.setEnabled(state);
+		// Thursday 
+		thur_startup_edit_bt.setEnabled(state);
+		thur_shutdown_edit_bt.setEnabled(state);
+		thur_schedule_enable_cb.setEnabled(state);
+		// Friday
+		fri_startup_edit_bt.setEnabled(state);
+		fri_shutdown_edit_bt.setEnabled(state);
+		fri_schedule_enable_cb.setEnabled(state);
+		// Saturday
+		sat_startup_edit_bt.setEnabled(state);
+		sat_shutdown_edit_bt.setEnabled(state);
+		sat_schedule_enable_cb.setEnabled(state);
+		// Sunday
+		sun_startup_edit_bt.setEnabled(state);
+		sun_shutdown_edit_bt.setEnabled(state);
+		sun_schedule_enable_cb.setEnabled(state);
+		// Global
+		global_startup_edit_bt.setEnabled(state);
+		global_shutdown_edit_bt.setEnabled(state);
+		global_schedule_enable_cb.setEnabled(state);
+		
 	}
 
     /**
      * Use stored in SharedPreferences' data to refresh UI
      */
     private void updateView() {
+    	enable_handle = false;
         Log.d(TAG, "Update widget display shutdown and startup time!");
 
         homepage_view.setText(getString(R.string.homepage_text_view_string)
@@ -260,10 +334,13 @@ public class BrowserActivity extends Activity {
         global_shutdown_edit_bt.setText(
                 formatTime((sp.getString(
                         GLOBAL_SHUTDOWN_TIME_KEY, DEFAULT_SHUTDOWN_TIME))));
+        /*
         global_schedule_enable_cb.setChecked(
                 sp.getInt(GLOBAL_SCHEDULE_ENABLE_KEY, SCHEDULE_ENABLE)
                         == SCHEDULE_ENABLE);
+                        */
 
+        enable_handle = true;
     }
 
     /**
@@ -330,21 +407,6 @@ public class BrowserActivity extends Activity {
                 webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 webIntent.putExtra("url", urlText);
                 BrowserActivity.this.startActivity(webIntent); // 打开浏览器
-                /*
-                // Use baidu browser
-                // 1. kill baidu browser process
-                Utils.execCmd("busybox killall com.baidu.browser.apps");
-
-                // 2. Start baidu browser
-                String urlText = sp.getString(BrowserActivity.WEB_URL_KEY,
-                        BrowserActivity.DEFAULT_WEB_URL);
-                Uri uri = Uri.parse(urlText);
-                Intent webIntent = new Intent();
-                webIntent.setAction(Intent.ACTION_VIEW);
-                webIntent.setData(uri);
-                webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                BrowserActivity.this.startActivity(webIntent);
-                */
             }
         });
 
@@ -490,6 +552,8 @@ public class BrowserActivity extends Activity {
 
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        	if (!enable_handle)
+        		return;
             Log.d(TAG, "Handle edit schedule enable event\t"
                     + "key:" + compoundButton.getTag()
                     + "\tEnabled:\t" + (b ? "true" : "false"));
@@ -501,13 +565,15 @@ public class BrowserActivity extends Activity {
                 for (String r_key : Utils.action_enableKey_maps.values()) {
                     editor.putInt(r_key, b ? 1 : 0).commit();
                 }
+                updateView();
             }
             // 2. If edit one day schedule enable state
             else {
                 // Don't forget commit, seriously !
                 editor.putInt(key, b ? 1 : 0).commit();
             }
-            updateView();
+            SerialWriteTask task = new SerialWriteTask(BrowserActivity.this, completedHandler);
+            task.start();
         }
     }
 
@@ -600,8 +666,6 @@ public class BrowserActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Update home page:\t" + editText.getText().toString());
-                //SharedPreferences sp = BrowserActivity.this
-                        //.getSharedPreferences(PREFERENCE_DATA, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(WEB_URL_KEY, editText.getText().toString()).commit();
                 dialog.dismiss();
@@ -622,8 +686,6 @@ public class BrowserActivity extends Activity {
     public  void setScheduleTime(Context ctx, String action, String key, String time) {
         Log.d(TAG, "Utils setScheduleTime key:" + key + "\taction:" + action + "\ttime:\t" + time);
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        //SharedPreferences sp = this.getSharedPreferences(
-                //BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         Intent r_intent = new Intent();
         int hours = Integer.valueOf(time.split(":")[0]).intValue();

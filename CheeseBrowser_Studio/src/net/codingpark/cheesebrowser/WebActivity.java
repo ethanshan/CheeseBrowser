@@ -3,6 +3,8 @@ package net.codingpark.cheesebrowser;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
@@ -14,7 +16,9 @@ import android.webkit.WebViewClient;
  * Created by ethanshan on 8/28/14.
  */
 public class WebActivity extends Activity {
+	private static final String TAG			= "WebActivity";
     private WebView webView     = null;
+    private Handler myHandler	= null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +31,7 @@ public class WebActivity extends Activity {
         
         //1. Get url from intent
         Intent intent = this.getIntent();
-        String url = intent.getStringExtra("url");
+        final String url = intent.getStringExtra("url");
         webView = (WebView)findViewById(R.id.webView);
         // Enable JavaScript
         webView.getSettings().setJavaScriptEnabled(true);
@@ -39,7 +43,18 @@ public class WebActivity extends Activity {
         // Set WebChromeClient
         webView.setWebChromeClient(new WebChromeClient());
         // Starting load the web page
-        webView.loadUrl(url);
+        // Loop refresh web page every 1 hour, in case play pause problem
+        myHandler = new Handler();
+        myHandler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				Log.d(TAG, "Load url");
+				webView.loadUrl(url);
+				myHandler.postDelayed(this, 60 * 60 * 1000);
+			}
+        	
+        });
     }
     
     @Override

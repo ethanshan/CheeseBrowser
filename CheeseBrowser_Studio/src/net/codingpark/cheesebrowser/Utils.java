@@ -5,13 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.codingpark.cheesebrowser.entity.DayInfo;
+import net.codingpark.cheesebrowser.entity.ScheduleSet;
 import net.codingpark.cheesebrowser.serialport.SerialPort;
 import net.codingpark.cheesebrowser.serialport.SerialPortManager;
 import android.app.AlarmManager;
@@ -26,9 +26,101 @@ import android.util.Log;
  */
 public class Utils {
 
-	public static final String TAG = "Utils";
+	public static final String TAG 					= "Utils";
 	
-	public static boolean serial_write_completed = false;
+	public static boolean serial_write_completed 	= false;
+	
+	private static Utils instance 					= null;
+	
+	private ScheduleSet	day_info_set				= null;
+	
+	private Utils() {
+		// Initial ScheduleSet
+		day_info_set	= new ScheduleSet();
+		// Sunday
+		DayInfo info = new DayInfo();
+		info.setDay_of_week(Calendar.SUNDAY);
+		info.setStartup_time_key(BrowserActivity.SUN_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.SUN_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.SUN_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.SUN_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.SUN_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// Monday
+		info = new DayInfo();
+		info.setDay_of_week(Calendar.MONDAY);
+		info.setStartup_time_key(BrowserActivity.MON_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.MON_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.MON_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.MON_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.MON_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// Tuesday
+		info = new DayInfo();
+		info.setDay_of_week(Calendar.TUESDAY);
+		info.setStartup_time_key(BrowserActivity.TUES_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.TUES_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.TUES_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.TUES_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.TUES_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// Wednesday
+		info = new DayInfo();
+		info.setDay_of_week(Calendar.WEDNESDAY);
+		info.setStartup_time_key(BrowserActivity.WED_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.WED_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.WED_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.WED_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.WED_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// Thursday
+		info = new DayInfo();
+		info.setDay_of_week(Calendar.THURSDAY);
+		info.setStartup_time_key(BrowserActivity.THUR_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.THUR_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.THUR_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.THUR_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.THUR_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// Friday
+		info = new DayInfo();
+		info.setDay_of_week(Calendar.FRIDAY);
+		info.setStartup_time_key(BrowserActivity.FRI_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.FRI_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.FRI_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.FRI_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.FRI_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// Saturday 
+		info = new DayInfo();
+		info.setDay_of_week(Calendar.SATURDAY);
+		info.setStartup_time_key(BrowserActivity.SAT_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.SAT_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.SAT_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.SAT_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.SAT_SCHEDULE_ENABLE_KEY);
+		day_info_set.addDayInfo(info);
+		// TODO Global needed??
+		/*
+		info = new DayInfo();
+		info.setDay_of_week(BrowserActivity.GLOBAL_DAY_OF_WEEK);
+		info.setStartup_time_key(BrowserActivity.GLOBAL_STARTUP_TIME_KEY);
+		info.setShutdown_time_key(BrowserActivity.GLOBAL_SHUTDOWN_TIME_KEY);
+		info.setStartup_action(BrowserActivity.GLOBAL_AUTO_STARTUP_ACTION);
+		info.setShutdown_action(BrowserActivity.GLOBAL_AUTO_SHUTDOWN_ACTION);
+		info.setSchedule_enable_key(BrowserActivity.GLOBAL_SCHEDULE_ENABLE_KEY);
+		*/
+	}
+	
+	public ScheduleSet getSet() {
+		return day_info_set;
+	}
+	
+	public static Utils getInstance() {
+		if (instance == null)
+			instance = new Utils();
+		return instance;
+	}
 
 	public static final Map<String, String> key_action_maps = new HashMap<String, String>() {
 		{

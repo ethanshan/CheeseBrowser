@@ -24,4 +24,7 @@
     <string name="quick_string"     >Quick Setting</string>
 
     <string name="single_enable_checkout_string">Enable</string>
+    
+    <string name="default_startup_time">6:30</string>
+    <string name="default_shutdown_time">18:30</string>
 </resources>

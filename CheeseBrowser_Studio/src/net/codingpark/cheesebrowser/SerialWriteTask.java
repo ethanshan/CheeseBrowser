@@ -7,10 +7,12 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.codingpark.cheesebrowser.entity.DayInfo;
 import net.codingpark.cheesebrowser.serialport.SerialPortManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,9 +33,9 @@ public class SerialWriteTask {
 		// 1. Write startup to MCU
 		Utils.setStartupTime(duration);
 		// 2. Loop read serial return results
-		//	if results == 85
+		//	if results == 85(Indicate success)
 		//	then shutdown and return
-		// 	else
+		// 	else (Indicate failed)
 		//	write startup to MCU, Again!
 		while (true) {
 			byte[] arrayOfByte = new byte[1];
@@ -80,66 +82,121 @@ public class SerialWriteTask {
 		this.completedHandler = completedHandler;
 	}
 	
-	public void start() {
-			SharedPreferences sp = context.getSharedPreferences(BrowserActivity.PREFERENCE_DATA, 
-					Context.MODE_PRIVATE);
-            // 4. Compute now day of week
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(System.currentTimeMillis());
-            int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
-            // 5. Calculate next startup time
-            String startup_time = sp.getString(Utils.startup_time_keys.get(day_of_week - 1)
-            		, BrowserActivity.DEFAULT_STARTUP_TIME);
-            //duration = Utils.getDuration(startup_time);
-            duration = 120L;
-            Log.d(TAG, "Startup duration: " + duration);
-            // 5 Write startup time to MCU
-            final Timer writeTask = new Timer();
-            writeTask.schedule(new TimerTask() {
+	public long getStartupTime() {
+		long time = -1L;
+		SharedPreferences sp = context.getSharedPreferences(BrowserActivity.PREFERENCE_DATA,
+				Context.MODE_PRIVATE);
+		DayInfo info = null;
 
-				@Override
-				public void run() {
-					if (Utils.serial_write_completed) {
-						Log.d(TAG, "Serial write completed, cancel write task!");
-						this.cancel();
-						writeTask.cancel();
-						Utils.serial_write_completed = false;
-						if (completedHandler != null) {
-							completedHandler.post(new Runnable() {
+		// Calculate current time
+		Calendar currentCal = Calendar.getInstance();
+		currentCal.setTimeInMillis(System.currentTimeMillis());
+		currentCal.set(Calendar.SECOND, 0);
+		int current_day_of_week = currentCal.get(Calendar.DAY_OF_WEEK);
 
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									Toast.makeText(context, "Serial write OK!", Toast.LENGTH_SHORT).show();
-								}
-
-							});
-							// TODO Just for test
-							Utils.shutdown();
-						}
-					} else {
-						Log.d(TAG, "Starting write task!");
-						if (task != null) {
-							if (task.isAlive())
-								task.interrupt();
-							while (task.isAlive()) {
-								try {
-									Thread.sleep(2000);
-									Log.d(TAG, "Task not stop, waiting 2s");
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
-							Log.d(TAG, "Task stopped, starting again!");
-						}
-						if (Utils.serial_write_completed)
-							return;
-						task = new WriteThread();
-						task.start();
-					}
+		for (int i = current_day_of_week + 1; i <= current_day_of_week + 7; i++) {
+			int r_day = i;
+			if (i > 7) {
+				r_day = i - 7;
+			}
+			info = Utils.getInstance().getSet().getByDayOfWeek(r_day);
+			if (sp.getInt(info.getSchedule_enable_key(),
+					BrowserActivity.SCHEDULE_ENABLE) 
+					== BrowserActivity.SCHEDULE_ENABLE) {
+				String endTime = sp.getString(info.getStartup_time_key(), BrowserActivity.DEFAULT_STARTUP_TIME);
+				long duration = 0;
+				// Calculate end time
+				Calendar endCal = Calendar.getInstance();
+				endCal.setTimeInMillis(System.currentTimeMillis());
+				int hours = Integer.valueOf(endTime.split(":")[0]).intValue();
+				int minutes = Integer.valueOf(endTime.split(":")[1]).intValue();
+				
+				int diff = 1;
+				if ( (r_day) > current_day_of_week)
+					diff = (r_day) - current_day_of_week;
+				else {
+					diff = 7 - (current_day_of_week - (r_day));
 				}
-            	
-            }, 0, 10000);
+				Log.d(TAG, "Diff day: " + diff);
+				endCal.add(Calendar.DAY_OF_MONTH, diff);
+				endCal.set(Calendar.HOUR_OF_DAY, hours);
+				endCal.set(Calendar.MINUTE, minutes);
+				endCal.set(Calendar.SECOND, 0);
+				// Calculate the duration between end time and start time
+				time = (endCal.getTimeInMillis() - currentCal.getTimeInMillis()) / 1000;
+				Log.d(TAG, "Duration: " + time);
+				return time;
+			}
+		}
+		Log.d(TAG, "Schedule all disabled! duration: " + time);
+		return time;
+	}
+	
+	public void start() {
+		if (completedHandler != null) {
+			// Send serial write starting message
+			Message msg = completedHandler.obtainMessage(BrowserActivity.WRITE_START);
+			completedHandler.sendMessage(msg);
+		}
+
+		duration = this.getStartupTime();
+		if (duration < 0)
+			duration = 0;
+
+		// 5 Write startup time to MCU
+		final Timer writeTask = new Timer();
+		writeTask.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				if (Utils.serial_write_completed) {
+					Log.d(TAG, "Serial write completed, cancel write task!");
+					this.cancel();
+					writeTask.cancel();
+					Utils.serial_write_completed = false;
+
+					if (completedHandler != null) {
+						// Send serial write completed message
+						Message msg = completedHandler.obtainMessage(BrowserActivity.WRITE_COMPLETED);
+						completedHandler.sendMessage(msg);
+					}
+		/*
+					if (completedHandler != null) {
+						completedHandler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								Toast.makeText(context, "Serial write OK!", Toast.LENGTH_SHORT).show();
+							}
+
+						});
+						// TODO Just for test
+						//Utils.shutdown();
+					}
+		 */
+				} else {
+					Log.d(TAG, "Starting write task!");
+					if (task != null) {
+						if (task.isAlive())
+							task.interrupt();
+						while (task.isAlive()) {
+							try {
+								Thread.sleep(2000);
+								Log.d(TAG, "Task not stop, waiting 2s");
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						Log.d(TAG, "Task stopped, starting again!");
+					}
+					if (Utils.serial_write_completed)
+						return;
+					task = new WriteThread();
+					task.start();
+				}
+			}
+
+		}, 0, 10000);
 	}
 
 }
