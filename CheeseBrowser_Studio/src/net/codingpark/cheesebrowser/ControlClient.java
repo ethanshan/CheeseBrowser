@@ -35,12 +35,7 @@ public class ControlClient extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Starting control client.");
-        //try {
-            //setupServer();
-            syncConfig();
-        //} catch (IOException e) {
-            //e.printStackTrace();
-        //}
+        syncConfig();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -85,42 +80,4 @@ public class ControlClient extends Service {
         };
         thread.start();
     }
-
-    /**
-     * Sets up the TCP/IP server socket.
-     */
-    /*
-    private void setupServer() throws IOException {
-        Log.d(TAG, "Setting up server...");
-        final ServerSocket socket = new ServerSocket(SERVER_PORT);
-        Log.i(TAG, "Listening on " + socket.getInetAddress().getHostAddress());
-        Thread connectionThread = new Thread(new Runnable() {
-            public void run() {
-                while (true) {
-                    try {
-                        Socket client = socket.accept();
-                        Log.d(TAG, "Client connected");
-                        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(client.getInputStream()));
-                        DataOutputStream out = new DataOutputStream(client.getOutputStream());
-                        String str = in.readLine();
-                        do {
-                            Log.d(TAG, "Received: " + str);
-                            out.write("OK OK OK".getBytes(Charset.forName("US-ASCII")));
-                            out.flush();
-                        } while( (str = in.readLine()) != null);
-                        in.close();
-                        out.close();
-                    } catch ( Exception ex ) {
-                        Log.e(TAG, "Error accepting connection: " + ex.getMessage());
-
-                    }
-                }
-            }
-        });
-        connectionThread.start();
-
-        Log.d(TAG, "Finished setting up server...");
-    }
-    */
 }

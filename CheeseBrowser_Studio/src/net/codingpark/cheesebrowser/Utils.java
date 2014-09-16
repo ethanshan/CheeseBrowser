@@ -295,6 +295,9 @@ public class Utils {
 		int hours = Integer.valueOf(time.split(":")[0]).intValue();
 		int minutes = Integer.valueOf(time.split(":")[1]).intValue();
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		Log.d(TAG, "Current hours:" + calendar.get(Calendar.HOUR_OF_DAY) 
+				+ "\tminutes:" + calendar.get(Calendar.MINUTE));
 		if (hours < calendar.get(Calendar.HOUR_OF_DAY)
 				|| (hours == calendar.get(Calendar.HOUR_OF_DAY) && minutes <= calendar
 						.get(Calendar.MINUTE))) {

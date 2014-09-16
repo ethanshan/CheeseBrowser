@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 public class SerialWriteTask {
 	
@@ -160,20 +159,6 @@ public class SerialWriteTask {
 						Message msg = completedHandler.obtainMessage(BrowserActivity.WRITE_COMPLETED);
 						completedHandler.sendMessage(msg);
 					}
-		/*
-					if (completedHandler != null) {
-						completedHandler.post(new Runnable() {
-
-							@Override
-							public void run() {
-								Toast.makeText(context, "Serial write OK!", Toast.LENGTH_SHORT).show();
-							}
-
-						});
-						// TODO Just for test
-						//Utils.shutdown();
-					}
-		 */
 				} else {
 					Log.d(TAG, "Starting write task!");
 					if (task != null) {

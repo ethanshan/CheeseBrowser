@@ -503,7 +503,7 @@ public class BrowserActivity extends Activity {
                     if (key.equals(GLOBAL_STARTUP_TIME_KEY)) {
                         for (String r_key : Utils.key_action_maps.keySet()) {
                             if (r_key.contains("startup"))
-                            setScheduleTime(BrowserActivity.this
+                            Utils.setScheduleTime(BrowserActivity.this
                                     , Utils.key_action_maps.get(r_key)
                                     , r_key, i + ":" + i2);
                         }
@@ -517,7 +517,7 @@ public class BrowserActivity extends Activity {
                     else if (key.equals(GLOBAL_SHUTDOWN_TIME_KEY)) {
                         for (String r_key : Utils.key_action_maps.keySet()) {
                             if (r_key.contains("shutdown"))
-                                setScheduleTime(BrowserActivity.this
+                                Utils.setScheduleTime(BrowserActivity.this
                                         , Utils.key_action_maps.get(r_key)
                                         , r_key, i + ":" + i2);
                         }
@@ -526,7 +526,7 @@ public class BrowserActivity extends Activity {
                     // 3. If edited is one day startup/shutdown time
                     // Update the day scheduled task time
                     else {
-                        setScheduleTime(BrowserActivity.this
+                        Utils.setScheduleTime(BrowserActivity.this
                                 , Utils.key_action_maps.get(key)
                                 , key, i + ":" + i2);
                         // Update startup time
@@ -683,38 +683,4 @@ public class BrowserActivity extends Activity {
         dialog.show();
     }
 
-    public  void setScheduleTime(Context ctx, String action, String key, String time) {
-        Log.d(TAG, "Utils setScheduleTime key:" + key + "\taction:" + action + "\ttime:\t" + time);
-        AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        SharedPreferences.Editor editor = sp.edit();
-        Intent r_intent = new Intent();
-        int hours = Integer.valueOf(time.split(":")[0]).intValue();
-        int minutes = Integer.valueOf(time.split(":")[1]).intValue();
-        Calendar calendar= Calendar.getInstance();
-        if (hours < calendar.get(Calendar.HOUR) ||
-                (hours == calendar.get(Calendar.HOUR)
-                        && minutes <= calendar.get(Calendar.MINUTE))) {
-            Log.d(TAG, "Set time before current time, trigger it tomorrow!");
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-        Log.d(TAG, "#####" + hours + "####" + minutes + "####action###" + action + "###time##" + calendar.getTime().toString());
-        calendar.set(Calendar.HOUR_OF_DAY, hours);
-        calendar.set(Calendar.MINUTE, minutes);
-        calendar.set(Calendar.SECOND, 0);
-
-        // 1. Store time to shared preference
-        editor.putString(key, time).commit();
-
-        // 2. Remove running auto schedule task
-        r_intent.setAction(action);
-        PendingIntent r_pending_intent =
-                PendingIntent.getBroadcast(this, 0, r_intent, 0);
-        alarmManager.cancel(r_pending_intent);
-
-        // 3. Use new time to create auto startup schedule task
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(), BrowserActivity.ONE_DAY_TIME_MILLIS,
-                r_pending_intent);
-    }
-    
 }
