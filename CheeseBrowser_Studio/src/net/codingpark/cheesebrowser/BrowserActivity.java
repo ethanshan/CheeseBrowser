@@ -178,17 +178,23 @@ public class BrowserActivity extends Activity {
 					case WRITE_START:
 						setUIState(false);
 						Log.d(TAG, "Write start");
-						Toast.makeText(BrowserActivity.this, "Write start", 5000).show();
+						Toast.makeText(BrowserActivity.this, 
+								BrowserActivity.this.getResources().getString(R.string.write_serial_starting_string),
+								5000).show();
 						break;
 					case WRITE_COMPLETED:
 						setUIState(true);
 						Log.d(TAG, "Write completed");
-						Toast.makeText(BrowserActivity.this, "Write completed", 5000).show();
+						Toast.makeText(BrowserActivity.this, 
+								BrowserActivity.this.getResources().getString(R.string.write_serial_completed_string),
+								5000).show();
 						break;
 					case WRITE_FAILED:
 						setUIState(true);
 						Log.d(TAG, "Write failed");
-						Toast.makeText(BrowserActivity.this, "Write failed", 5000).show();
+						Toast.makeText(BrowserActivity.this, 
+								BrowserActivity.this.getResources().getString(R.string.write_serial_failed_string),
+								5000).show();
 						break;
 					default:
 						Log.d(TAG, "Valid message!");

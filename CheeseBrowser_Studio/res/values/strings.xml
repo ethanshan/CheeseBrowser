@@ -27,4 +27,8 @@
     
     <string name="default_startup_time">6:30</string>
     <string name="default_shutdown_time">18:30</string>
+
+    <string name="write_serial_starting_string">Starting write</string>
+    <string name="write_serial_completed_string">Write completed</string>
+    <string name="write_serial_failed_string">Write failed</string>
 </resources>
