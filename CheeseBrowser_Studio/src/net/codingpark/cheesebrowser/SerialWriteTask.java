@@ -81,30 +81,44 @@ public class SerialWriteTask {
 		this.completedHandler = completedHandler;
 	}
 	
+	/**
+	 * Calculate next schedule startup time
+	 * @return
+	 * 	-1: User disable all schedule task
+	 * 	>0: The next startup time
+	 */
 	public long getStartupTime() {
+		// Initial the startup time negative
+		// If user disable 1~7 schedule task, return negative value.
 		long time = -1L;
 		SharedPreferences sp = context.getSharedPreferences(BrowserActivity.PREFERENCE_DATA,
 				Context.MODE_PRIVATE);
 		DayInfo info = null;
 
-		// Calculate current time
+		// Calculate current calendar
 		Calendar currentCal = Calendar.getInstance();
 		currentCal.setTimeInMillis(System.currentTimeMillis());
 		currentCal.set(Calendar.SECOND, 0);
 		int current_day_of_week = currentCal.get(Calendar.DAY_OF_WEEK);
 
+		// Start from tomorrow, loop a cycle
 		for (int i = current_day_of_week + 1; i <= current_day_of_week + 7; i++) {
+			// Calculate tomorrow value day of week
 			int r_day = i;
 			if (i > 7) {
 				r_day = i - 7;
 			}
+			// Obtain the day related structure, such as action name, time key...
 			info = Utils.getInstance().getSet().getByDayOfWeek(r_day);
+			// Judge weather enable schedule startup/shutdown action
+			// if enabled: next startup time is it, calculate time
+			// if disabled: continue try next day
 			if (sp.getInt(info.getSchedule_enable_key(),
 					BrowserActivity.SCHEDULE_ENABLE) 
 					== BrowserActivity.SCHEDULE_ENABLE) {
 				String endTime = sp.getString(info.getStartup_time_key(), BrowserActivity.DEFAULT_STARTUP_TIME);
 				long duration = 0;
-				// Calculate end time
+				// Calculate end calendar
 				Calendar endCal = Calendar.getInstance();
 				endCal.setTimeInMillis(System.currentTimeMillis());
 				int hours = Integer.valueOf(endTime.split(":")[0]).intValue();
@@ -131,6 +145,9 @@ public class SerialWriteTask {
 		return time;
 	}
 	
+	/**
+	 * Start serial port write task
+	 */
 	public void start() {
 		if (completedHandler != null) {
 			// Send serial write starting message
