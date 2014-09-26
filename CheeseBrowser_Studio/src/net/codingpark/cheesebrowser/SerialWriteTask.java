@@ -99,6 +99,7 @@ public class SerialWriteTask {
 		Calendar currentCal = Calendar.getInstance();
 		currentCal.setTimeInMillis(System.currentTimeMillis());
 		currentCal.set(Calendar.SECOND, 0);
+		Log.d(TAG, "Current time: " + currentCal.getTime().toString());
 		int current_day_of_week = currentCal.get(Calendar.DAY_OF_WEEK);
 
 		// Start from tomorrow, loop a cycle
@@ -131,10 +132,13 @@ public class SerialWriteTask {
 					diff = 7 - (current_day_of_week - (r_day));
 				}
 				Log.d(TAG, "Diff day: " + diff);
-				endCal.add(Calendar.DAY_OF_MONTH, diff);
+				Log.d(TAG, "End hour: " + hours);
+				Log.d(TAG, "End minutes: " + minutes);
 				endCal.set(Calendar.HOUR_OF_DAY, hours);
 				endCal.set(Calendar.MINUTE, minutes);
 				endCal.set(Calendar.SECOND, 0);
+				endCal.add(Calendar.DAY_OF_MONTH, diff);
+				Log.d(TAG, "End time: " + endCal.getTime().toString());
 				// Calculate the duration between end time and start time
 				time = (endCal.getTimeInMillis() - currentCal.getTimeInMillis()) / 1000;
 				Log.d(TAG, "Duration: " + time);
