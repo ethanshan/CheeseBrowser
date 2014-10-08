@@ -59,6 +59,7 @@ public class BrowserActivity extends Activity {
     private Button stop_server_button               = null;
     private Button test_button                      = null;
     private Button show_delay_button				= null;
+    private Button help_button						= null;
 
     // -------------- Monday to Sunday related show/edit widget --------
     private Button mon_startup_edit_bt              = null;
@@ -460,6 +461,16 @@ public class BrowserActivity extends Activity {
 			}
         	
         });
+        
+        help_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent r_intent = new Intent(BrowserActivity.this, HelpActivity.class);
+				BrowserActivity.this.startActivity(r_intent);
+			}
+        	
+        });
 
         // Handle edit web site home page
         homepage_edit_button.setOnClickListener(new OnClickListener() {
@@ -615,6 +626,7 @@ public class BrowserActivity extends Activity {
         stop_server_button = (Button) findViewById(R.id.stop_server_button);
         test_button = (Button) findViewById(R.id.test_button);
         show_delay_button = (Button) findViewById(R.id.show_delay_bt);
+        help_button = (Button) findViewById(R.id.help_button);
 
         // One week widget initial
         mon_startup_edit_bt         = (Button)findViewById(R.id.mon_set_startup_bt);

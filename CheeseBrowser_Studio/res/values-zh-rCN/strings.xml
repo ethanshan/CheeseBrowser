@@ -10,6 +10,7 @@
     <string name="edit_dialog_cancel_button">取消</string>
     <string name="play_button">开始播放</string>
     <string name="show_delay_button">显示延时:</string>
+    <string name="help_button">帮助</string>
 
     <string name="startup_time_text_view_string">自动开机时间:</string>
     <string name="shutdown_time_text_view_string">自动关机时间:</string>
@@ -31,4 +32,10 @@
     <string name="write_serial_failed_string">写入失败</string>
 
     <string name="show_delay_title_string">显示延时:</string>
+    
+        <!--Help page-->
+    <string name="product_info">"Cheese 展示系统客户端,功能稳定,易用, 是您发布，展示多媒体资源的好帮手.\n\n"</string>
+    <string name="version_info">版本: 1.1</string>
+    <string name="Email_Developer">"电子邮件"</string>
+    <string name="Website">"官网"</string>
 </resources>

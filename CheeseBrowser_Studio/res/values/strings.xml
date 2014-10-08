@@ -10,6 +10,7 @@
     <string name="edit_dialog_cancel_button">Cancel</string>
     <string name="play_button">Play</string>
     <string name="show_delay_button">Show Delay:</string>
+    <string name="help_button">help</string>
 
     <string name="startup_time_text_view_string" >Auto Startup Time: </string>
     <string name="shutdown_time_text_view_string">Auto Shutdown Time:</string>
@@ -34,4 +35,10 @@
     <string name="write_serial_failed_string">Write failed</string>
     
     <string name="show_delay_title_string">Show delay:</string>
+    
+        <!--Help page-->
+    <string name="product_info">Cheese Cloud description</string>
+    <string name="version_info">Version: 1.1</string>
+    <string name="Email_Developer">Email Developer</string>
+    <string name="Website">Website</string>
 </resources>
