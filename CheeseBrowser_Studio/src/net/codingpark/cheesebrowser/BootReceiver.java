@@ -1,9 +1,5 @@
 package net.codingpark.cheesebrowser;
 
-import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +16,9 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // 1. Obtain SharedPreferences object
-        SharedPreferences sp = context.getSharedPreferences(
+        final SharedPreferences sp = context.getSharedPreferences(
                 BrowserActivity.PREFERENCE_DATA, Context.MODE_PRIVATE);
+        final Context mContext = context;
 
         // 2. Listening connectivity change action
         if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
@@ -33,22 +30,32 @@ public class BootReceiver extends BroadcastReceiver {
                 if (ni.isConnected() && first_time) {
                     Log.d(TAG, "Receive Connected Action, start browser");
                     first_time = false;
-                    try {
-                        Log.d(TAG, "Waiting 5 seconds");
-                        Thread.sleep(5000);
-                        Log.d(TAG, "Start Browser");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    // Get broadcast url from SharedPreferences
-                    String urlText = sp.getString(BrowserActivity.WEB_URL_KEY,
-                            BrowserActivity.DEFAULT_WEB_URL);   // Web URL
-                    // Put the url to intent
-                    Intent webIntent = new Intent(context, WebActivity.class);
-                    webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    webIntent.putExtra("url", urlText);
-                    // Start WebActivity to play
-                    context.startActivity(webIntent);
+                    Thread t = new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							String delay_time = 
+									sp.getString(BrowserActivity.SHOW_DELAY_KEY, BrowserActivity.DEFAULT_SHOW_DELAY); 
+							try {
+								Log.d(TAG, "Waiting " + delay_time + " seconds");
+								Thread.sleep(Integer.valueOf(delay_time) * 1000);
+								Log.d(TAG, "Start Browser");
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							// Get broadcast url from SharedPreferences
+							String urlText = sp.getString(BrowserActivity.WEB_URL_KEY,
+									BrowserActivity.DEFAULT_WEB_URL);   // Web URL
+							// Put the url to intent
+							Intent webIntent = new Intent(mContext, WebActivity.class);
+							webIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							webIntent.putExtra("url", urlText);
+							// Start WebActivity to play
+							mContext.startActivity(webIntent);
+						}
+                    	
+                    });
+                    t.start();
                      
                     /* Use system default browser as display application */
 //                    Uri uri = Uri.parse(urlText);

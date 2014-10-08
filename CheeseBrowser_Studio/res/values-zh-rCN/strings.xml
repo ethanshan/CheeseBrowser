@@ -9,6 +9,7 @@
     <string name="edit_dialog_ok_button">确认</string>
     <string name="edit_dialog_cancel_button">取消</string>
     <string name="play_button">开始播放</string>
+    <string name="show_delay_button">显示延时:</string>
 
     <string name="startup_time_text_view_string">自动开机时间:</string>
     <string name="shutdown_time_text_view_string">自动关机时间:</string>
@@ -28,4 +29,6 @@
     <string name="write_serial_starting_string">开始写入</string>
     <string name="write_serial_completed_string">写入完成</string>
     <string name="write_serial_failed_string">写入失败</string>
+
+    <string name="show_delay_title_string">显示延时:</string>
 </resources>

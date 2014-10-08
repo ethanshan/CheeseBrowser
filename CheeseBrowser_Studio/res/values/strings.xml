@@ -9,6 +9,7 @@
     <string name="edit_dialog_ok_button">OK</string>
     <string name="edit_dialog_cancel_button">Cancel</string>
     <string name="play_button">Play</string>
+    <string name="show_delay_button">Show Delay:</string>
 
     <string name="startup_time_text_view_string" >Auto Startup Time: </string>
     <string name="shutdown_time_text_view_string">Auto Shutdown Time:</string>
@@ -31,4 +32,6 @@
     <string name="write_serial_starting_string">Starting write</string>
     <string name="write_serial_completed_string">Write completed</string>
     <string name="write_serial_failed_string">Write failed</string>
+    
+    <string name="show_delay_title_string">Show delay:</string>
 </resources>

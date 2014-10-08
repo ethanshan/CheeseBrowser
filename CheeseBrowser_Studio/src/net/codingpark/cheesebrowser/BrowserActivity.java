@@ -35,11 +35,13 @@ import android.widget.Toast;
  * --------------------------------------------------------
  * |    web_url     | String | PREFERENCE_DATA | http://..|
  * ---------------------------------------------------------
- * | mon_startup_time | String | PREFERENCE_DATA | 6:30 |
+ * |   show_delay   | String | PREFERENCE_DATA | 30       |
+ * ---------------------------------------------------------
+ * | mon_startup_time | String | PREFERENCE_DATA | 6:30   |
  * ---------------------------------------------------------
  * | mon_shutdown_time | String | PREFERENCE_DATA | 18:30 |
  * ---------------------------------------------------------
- * | mon_schedule_enable | int | PREFERENCE_DATA | 1 |
+ * | mon_schedule_enable | int  | PREFERENCE_DATA |  1    |
  * ---------------------------------------------------------
  * |..tues..wed..thur..fri..sat..sun|
  */
@@ -56,6 +58,7 @@ public class BrowserActivity extends Activity {
     private Button start_server_button              = null;
     private Button stop_server_button               = null;
     private Button test_button                      = null;
+    private Button show_delay_button				= null;
 
     // -------------- Monday to Sunday related show/edit widget --------
     private Button mon_startup_edit_bt              = null;
@@ -122,6 +125,9 @@ public class BrowserActivity extends Activity {
     public static final String DEFAULT_STARTUP_TIME         = "6:30";
     public static final String DEFAULT_SHUTDOWN_TIME        = "18:30";
     public static final int DEFAULT_SCHEDULE_STATE          = SCHEDULE_ENABLE;
+    
+    public static final String SHOW_DELAY_KEY				= "show_delay";
+    public static final String DEFAULT_SHOW_DELAY			= "30";
 
     // ----------------Monday to Sunday key value----------------
     public static final String MON_STARTUP_TIME_KEY         = "mon_startup_time";
@@ -254,6 +260,9 @@ public class BrowserActivity extends Activity {
 
         homepage_view.setText(getString(R.string.homepage_text_view_string)
                 .concat(sp.getString(WEB_URL_KEY, DEFAULT_WEB_URL)));
+        
+        show_delay_button.setText(getString(R.string.show_delay_button)
+        		.concat(sp.getString(SHOW_DELAY_KEY, DEFAULT_SHOW_DELAY)));
 
         // Update widget for Monday to Sunday
         // 1.
@@ -441,6 +450,16 @@ public class BrowserActivity extends Activity {
                 task.start();
             }
         });
+        
+        show_delay_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.d(TAG, "show delay button clicked!");
+				editShowDelay();
+			}
+        	
+        });
 
         // Handle edit web site home page
         homepage_edit_button.setOnClickListener(new OnClickListener() {
@@ -595,7 +614,7 @@ public class BrowserActivity extends Activity {
         start_server_button = (Button) findViewById(R.id.start_server_button);
         stop_server_button = (Button) findViewById(R.id.stop_server_button);
         test_button = (Button) findViewById(R.id.test_button);
-
+        show_delay_button = (Button) findViewById(R.id.show_delay_bt);
 
         // One week widget initial
         mon_startup_edit_bt         = (Button)findViewById(R.id.mon_set_startup_bt);
@@ -647,6 +666,41 @@ public class BrowserActivity extends Activity {
         global_startup_edit_bt.setTag(GLOBAL_STARTUP_TIME_KEY);
         global_shutdown_edit_bt.setTag(GLOBAL_SHUTDOWN_TIME_KEY);
         global_schedule_enable_cb.setTag(GLOBAL_SCHEDULE_ENABLE_KEY);
+	}
+	
+	private void editShowDelay() {
+        Log.d(TAG, "Handle set show delay action");
+        // 1. Create edit dialog and initial related widget
+        final Dialog dialog = new Dialog(BrowserActivity.this);
+        dialog.setContentView(R.layout.edit_dialog);
+        Button ok_b = (Button) dialog.findViewById(R.id.edit_dialog_ok_b);
+        Button cancel_b = (Button) dialog.findViewById(R.id.edit_dialog_cancel_b);
+        TextView title = (TextView) dialog.findViewById(R.id.edit_dialog_title);
+        title.setText(getString(R.string.show_delay_title_string));
+        final EditText editText = (EditText) dialog.findViewById(R.id.edit_dialog_edit_text);
+        editText.setText(sp.getString(SHOW_DELAY_KEY, DEFAULT_SHOW_DELAY));
+
+        // 2. Add ok/cancel button handler
+        ok_b.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Update show delay:\t" + editText.getText().toString());
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(SHOW_DELAY_KEY, editText.getText().toString()).commit();
+                dialog.dismiss();
+                updateView();
+            }
+        });
+        cancel_b.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Don't need update show delay");
+                dialog.dismiss();
+            }
+        });
+        // 3. Make Dialog show
+        dialog.show();
+		
 	}
 
     /**
